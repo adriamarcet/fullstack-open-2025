@@ -1,11 +1,11 @@
 import Part from "./Part";
 
-function Content(props) {
+function Content({parts}) {
   return (
     <>
-      <Part name={props.part1} number={props.exercises1} />
-      <Part name={props.part2} number={props.exercises2} />
-      <Part name={props.part3} number={props.exercises3} />
+      <Part name={parts[0].name} number={parts[0].exercise} />
+      <Part name={parts[1].name} number={parts[1].exercise} />
+      <Part name={parts[2].name} number={parts[2].exercise} />
     </>
   )
 }
