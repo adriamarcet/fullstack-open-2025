@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import Statistics from './Statistics.jsx';
+import Button from './Button.jsx';
 
 function App() {
   const [good, setGood] = useState(0)
@@ -29,17 +30,17 @@ function App() {
         <div style={{display: 'flex'}}>
           <div style={{display: 'flex', flexDirection: 'column', flexBasis: '20%', alignItems: 'center'}}>
             <span>{good}</span>
-            <button onClick={handleGoodFeedback}>Good</button>
+            <Button onClick={handleGoodFeedback} text="Good" />
           </div>
         
           <div style={{display: 'flex', flexDirection: 'column', flexBasis: '20%', alignItems: 'center'}}>
               <span>{neutral}</span>
-              <button onClick={handleNeutralFeedback}>Neutral</button>
+              <Button onClick={handleNeutralFeedback} text="Neutral" />
           </div>
     
            <div style={{display: 'flex', flexDirection: 'column', flexBasis: '20%', alignItems: 'center'}}>
               <span>{bad}</span>
-              <button onClick={handleBadFeedback}>Bad</button>
+              <Button onClick={handleBadFeedback} text="Bad" />
           </div>
         </div>
       </section>
