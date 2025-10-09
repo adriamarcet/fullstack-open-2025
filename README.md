@@ -16,17 +16,19 @@ This repository is organized by course parts, each focusing on different aspects
 - Web application fundamentals
 - HTTP protocol
 - Single Page Applications (SPA)
-- **Current Status:** 🔄 In Progress - Exercise 4
+- **Current Status:** ✅ Completed
 
 ### Part 1: Introduction to React
 - React basics
 - JavaScript fundamentals for React
 - Component state and event handlers
+- **Current Status:** ✅ Completed
 
 ### Part 2: Communicating with server
 - Rendering collections and forms
 - Server communication
 - Adding styles to React apps
+- **Current Status:** 🔄 In Progress - Exercise 2.1
 
 ### Part 3: Programming a server with NodeJS and Express
 - Node.js and Express
@@ -103,15 +105,20 @@ This repository is organized by course parts, each focusing on different aspects
 
 ## Progress Tracking
 
-- [x] Part 0: Started ✅
+- [x] Part 0: Completed ✅
   - [x] Exercise 0.1: HTML
   - [x] Exercise 0.2: CSS  
   - [x] Exercise 0.3: HTML forms
-  - [x] Exercise 0.4: New note (In Progress)
-  - [ ] Exercise 0.5: Single page app
-  - [ ] Exercise 0.6: New note in Single page app
-- [ ] Part 1: Not started
-- [ ] Part 2: Not started
+  - [x] Exercise 0.4: New note diagram
+  - [x] Exercise 0.5: Single page app diagram
+  - [x] Exercise 0.6: New note in Single page app diagram
+- [x] Part 1: Completed ✅
+  - [x] Exercise 1.1-1.2: Course information (courseinfo)
+  - [x] Exercise 1.3-1.5: Course information refactoring
+  - [x] Exercise 1.6-1.11: Unicafe feedback app
+  - [x] Exercise 1.12-1.14: Anecdotes app
+- [x] Part 2: In Progress 🔄
+  - [x] Exercise 2.1: Course information step 6
 - [ ] Part 3: Not started
 - [ ] Part 4: Not started
 - [ ] Part 5: Not started
@@ -158,4 +165,6 @@ Each part contains its own setup instructions. Navigate to the specific part dir
 ---
 
 **Learning Journey Started:** September 2025  
+**Last Updated:** October 2025  
+**Current Focus:** Part 2 - Server Communication  
 **Estimated Completion:** TBD
