@@ -1,14 +1,19 @@
 import Part from './Part';
+import Total from './Total';
 
 const Content = ({course}) => {
     const parts = course.parts;
+    let total = parts.map(part => part.exercises).reduce((prev, curr) => prev + curr);
     
     return (
-        <div>
-            {
-                parts.map(part => <Part name={part.name} exercises={part.exercises} key={part.id} />)
-            }
-        </div>
+        <>
+            <ul>
+                {
+                    parts.map(part => <li key={part.id}><Part name={part.name} exercises={part.exercises} /></li>)
+                }
+            </ul>
+            <Total total={total} />
+        </>
     )
 }
 
