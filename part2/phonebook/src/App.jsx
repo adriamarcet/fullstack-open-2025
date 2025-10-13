@@ -1,5 +1,7 @@
 import { useState } from 'react'
-import Searchresults from './Searchresults';
+import Filter from './Components/Filter';
+import AddNewPerson from './Components/AddNewPerson';
+import ShowAllPersons from './Components/ShowAllPersons';
 
 const App = () => {
   const [persons, setPersons] = useState([
@@ -38,9 +40,7 @@ const App = () => {
         ${nameAddition.name} already entered. 
         Please try a different one.
       ` )
-    } else {
-      console.log('persons: ', persons);
-      
+    } else {      
       setPersons(persons.concat(nameAddition));
       setNewName('');
       setNewPhone('');
@@ -52,47 +52,21 @@ const App = () => {
       <h1>Phonebook</h1>
       <section>
         <h2>Search a name</h2>
-        <div style={{display: 'flex', flexDirection: 'column', gap: '.5rem'}}>
-        <label htmlFor="search">Search the address book by person's name</label>
-        <input id="search" type="search" value={search} onChange={handleSearch} />
-        {search.length > 0 && (
-          <>
-            <fieldset>
-              <strong>Search results:</strong>
-              <ul><Searchresults query={search} data={persons}/></ul>
-            </fieldset>
-          </>
-        )}
-        </div>
+        <Filter search={search} data={persons} handleSearch={handleSearch} />
       </section>
       <section>
         <h2>Add a name</h2>
-        <form onSubmit={enterNewAddition} style={{display: 'flex', flexDirection: 'column'}}>
-          <fieldset>
-            <label htmlFor="name" style={{display: 'flex', flexDirection: 'column'}}>Name</label>
-            <input id="name" type="text" value={newName} onChange={handleNewName} />
-          </fieldset>
-          <fieldset>
-            <label htmlFor="phone" style={{display: 'flex', flexDirection: 'column'}}>
-              <span>Phone number</span>
-              <small>Format: 654321098</small>
-            </label>
-            <input id="phone" type="tel" value={newPhone} onChange={handleNewPhone} />
-          </fieldset>
-          <fieldset> 
-            <button type="submit">add</button>
-          </fieldset>
-        </form>
+        <AddNewPerson 
+          action={enterNewAddition} 
+          newName={newName} 
+          handleNewName={handleNewName} 
+          newPhone={newPhone}
+          handleNewPhone={handleNewPhone}
+        />
       </section>
       <section>
         <h2>Numbers</h2>
-        <ul>
-          {
-            persons.map(person => {
-              return <li key={person.id}>{person.name}{person.phone && ` - ${person.phone}`}</li>
-          })
-          }
-        </ul>
+        <ShowAllPersons data={persons} />
       </section>
     </div>
   )
