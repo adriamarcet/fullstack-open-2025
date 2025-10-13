@@ -19,16 +19,12 @@ const App = () => {
 
   const handleNewName = event => setNewName(event.target.value);
   const handleNewPhone = event => setNewPhone(event.target.value);
-  const handleSearch = event => {
-    console.log('search term: ', search);
-    
-    setSearch(event.target.value)
-  };
-  const maxId = persons.length > 0 ? Math.max(...persons.map(person => person.id)) : 0;
+  const handleSearch = event => setSearch(event.target.value);
   
   const enterNewAddition = (event) => {
     event.preventDefault();
 
+    const maxId = persons.length > 0 ? Math.max(...persons.map(person => person.id)) : 0;
     const nameAddition = {
       name: newName,
       phone: newPhone,
@@ -93,7 +89,7 @@ const App = () => {
         <ul>
           {
             persons.map(person => {
-              return <li key={person.name}>{person.name}{person.phone && ` - ${person.phone}`}</li>
+              return <li key={person.id}>{person.name}{person.phone && ` - ${person.phone}`}</li>
           })
           }
         </ul>

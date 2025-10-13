@@ -1,8 +1,8 @@
 const Searchresults = ({query, data}) => {
-    const filteredPersons = data.filter(element => element.name.toLowerCase().indexOf(query.toLowerCase()) > -1);
+    const filteredPersons = data.filter(element => element.name.toLowerCase().includes(query.toLowerCase()));
     
     return filteredPersons.map(person => {
-            return <li key={person.name}>{person.name}{person.phone && ` - ${person.phone}`}</li>
+        return <li key={person.name}>{person.name}{person.phone && ` - ${person.phone}`}</li>
     })
 }
 
