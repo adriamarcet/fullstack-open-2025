@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 const App = () => {
   const [persons, setPersons] = useState([
-    { name: 'Arto Hellas' }
+    { name: 'Arto Hellas', phone: '654321098' }
   ]) 
   const [newName, setNewName] = useState('')
   const [newPhone, setNewPhone] = useState('')
@@ -62,7 +62,7 @@ const App = () => {
         <ul>
           {
             persons.map(person => {
-              return <li key={person.name}>{person.name}{person.phone === undefined ? '' : ` - ${person.phone}`}</li>
+              return <li key={person.name}>{person.name}{person.phone && ` - ${person.phone}`}</li>
           })
           }
         </ul>
