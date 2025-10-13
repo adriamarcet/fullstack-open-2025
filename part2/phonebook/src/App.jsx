@@ -10,16 +10,23 @@ const App = () => {
   
   const addName = (event) => {
     event.preventDefault();
-    console.log('form event: ', event); 
 
     const nameAddition = {
       name: newName
     }
-
-    setPersons(persons.concat(nameAddition));
-    setNewName('');
-    console.log('persons: ', persons);
     
+    if(persons.some(person => person.name === nameAddition.name)) {
+      console.log('name already entered: ', persons);
+      window.alert(`
+        ⚠️
+
+        ${nameAddition.name} already entered. 
+        Please try a different one.
+      ` )
+    } else {
+      setPersons(persons.concat(nameAddition));
+      setNewName('');
+    }
   }
 
   return (
