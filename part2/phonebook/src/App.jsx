@@ -1,19 +1,19 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Filter from './Components/Filter';
 import AddNewPerson from './Components/AddNewPerson';
 import ShowAllPersons from './Components/ShowAllPersons';
+import axios from 'axios';
 
 const App = () => {
-  const [persons, setPersons] = useState([
-    { name: 'Bob Esponja Pantalones Cuadrados', phone: '555-KRAB-001', id: 1 },
-    { name: 'Patricio Estrella', phone: '555-ROCK-002', id: 2 },
-    { name: 'Calamardo Tentáculos', phone: '555-CLAR-003', id: 3 },
-    { name: 'Arenita Mejillas', phone: '555-TREE-004', id: 4 },
-    { name: 'Don Cangrejo Krabs', phone: '555-MONE-005', id: 5 },
-    { name: 'Gary el Caracol', phone: '555-MEOW-006', id: 6 },
-    { name: 'Perla Krabs', phone: '555-MALL-007', id: 7 },
-    { name: 'Plankton Sheldon', phone: '555-EVIL-008', id: 8 }
-  ])
+  const [persons, setPersons] = useState([])
+  
+  useEffect(() => {  
+    axios
+      .get('http://localhost:3001/characters')
+      .then(response => {
+        setPersons(response.data)
+    }) 
+    }, [])
 
   const [newName, setNewName] = useState('')
   const [newPhone, setNewPhone] = useState('')
