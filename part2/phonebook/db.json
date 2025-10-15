@@ -53,6 +53,18 @@
       "name": "Patricio Estrella",
       "phone": "555-ROCK-002",
       "important": false
+    },
+    {
+      "id": "8003",
+      "name": "Gary el Caracol",
+      "phone": "555-MEOW-006",
+      "important": true
+    },
+    {
+      "id": "f2a2",
+      "name": "Don Cangrejo Krabs",
+      "phone": "555-MONE-005",
+      "important": true
     }
   ]
 }

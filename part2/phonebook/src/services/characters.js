@@ -1,0 +1,14 @@
+import axios from 'axios';
+const baseUrl = 'http://localhost:3001/characters';
+
+const getAllFromCharacters = () => {
+    const request = axios.get(baseUrl)
+    return request.then(response => response.data)
+};
+
+const createNewFromCharacters = newAddition => {
+    const request = axios.post(baseUrl, newAddition);
+    return request.then(response => response.data)
+};
+
+export default { getAllFromCharacters, createNewFromCharacters };

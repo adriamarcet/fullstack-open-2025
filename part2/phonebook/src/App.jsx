@@ -2,17 +2,13 @@ import { useEffect, useState } from 'react'
 import Filter from './Components/Filter';
 import AddNewPerson from './Components/AddNewPerson';
 import ShowAllPersons from './Components/ShowAllPersons';
-import axios from 'axios';
+import { getAllFromCharacters, createNewFromCharacters } from './services/characters';
 
 const App = () => {
   const [persons, setPersons] = useState([])
   
   useEffect(() => {  
-    axios
-      .get('http://localhost:3001/characters')
-      .then(response => {
-        setPersons(response.data)
-    }) 
+    getAllFromCharacters().then(dataFromCharacters => setPersons(dataFromCharacters))
     }, [])
 
   const [newName, setNewName] = useState('')
@@ -26,28 +22,26 @@ const App = () => {
   const enterNewAddition = (event) => {
     event.preventDefault();
 
-    const nameAddition = {
+    const newCharacterAddition = {
       name: newName,
       phone: newPhone,
       important: Math.random() < 0.5
     }
     
-    if(persons.some(person => person.name === nameAddition.name)) {
+    if(persons.some(person => person.name === newCharacterAddition.name)) {
       window.alert(`
         ⚠️
 
-        ${nameAddition.name} already entered. 
+        ${newCharacterAddition.name} already entered. 
         Please try a different one.
       ` )
       return
-
     }
 
-    axios
-      .post('http://localhost:3001/characters', nameAddition)
-      .then(response => {
-        console.log('response from axios payload post', response.data);
-        setPersons(persons.concat(response.data));
+    createNewFromCharacters(newCharacterAddition)
+      .then(returnedData => {
+        console.log('response from axios payload post', returnedData);
+        setPersons(persons.concat(returnedData));
         setNewName('');
         setNewPhone('');
     })
