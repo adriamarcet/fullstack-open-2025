@@ -1,8 +1,8 @@
-const ShowAllPersons = ({data: persons}) => {
+const ShowAllPersons = ({data}) => {
     return (
         <ul>
           {
-            persons.map(person => {
+            data.map(person => {
               return <li key={person.id}>{person.name}{person.phone && ` - ${person.phone}`}</li>
           })
           }

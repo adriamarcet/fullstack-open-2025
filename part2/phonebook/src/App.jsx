@@ -26,11 +26,10 @@ const App = () => {
   const enterNewAddition = (event) => {
     event.preventDefault();
 
-    const maxId = persons.length > 0 ? Math.max(...persons.map(person => person.id)) : 0;
     const nameAddition = {
       name: newName,
       phone: newPhone,
-      id: maxId + 1
+      important: Math.random() < 0.5
     }
     
     if(persons.some(person => person.name === nameAddition.name)) {
@@ -40,11 +39,18 @@ const App = () => {
         ${nameAddition.name} already entered. 
         Please try a different one.
       ` )
-    } else {      
-      setPersons(persons.concat(nameAddition));
-      setNewName('');
-      setNewPhone('');
+      return
+
     }
+
+    axios
+      .post('http://localhost:3001/characters', nameAddition)
+      .then(response => {
+        console.log('response from axios payload post', response.data);
+        setPersons(persons.concat(response.data));
+        setNewName('');
+        setNewPhone('');
+    })
   }
 
   return (
