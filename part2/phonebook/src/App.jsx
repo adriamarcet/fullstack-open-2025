@@ -18,12 +18,12 @@ const App = () => {
   const handleNewName = event => setNewName(event.target.value);
   const handleNewPhone = event => setNewPhone(event.target.value);
   const handleSearch = event => setSearch(event.target.value);
-  const handleDelition = id => {
+  const handledeletion = id => {
     const match = persons.filter(person => person.id === id) 
     const name = match[0].name;
 
-    window.confirm(`Beware for ${name} will be deleted. May we proceed with this delition?`) && 
-      deleteFromCharacters(id).then(() => getAllFromCharacters().then(dataFromCharacters => setPersons(dataFromCharacters)))
+    window.confirm(`Beware for ${name} will be deleted. May we proceed with this deletion?`) && 
+      deleteFromCharacters(id).then(() => setPersons(persons.filter(person => person.id !== id )))
   }
 
   const enterNewAddition = (event) => {
@@ -73,7 +73,7 @@ const App = () => {
       <section>
         <h2>Numbers</h2>
         { persons.length === 0 && <p>Anyone here, sorry</p>}
-        { persons.length > 0 && <ShowAllPersons data={persons} handleDelition={handleDelition} />}
+        { persons.length > 0 && <ShowAllPersons data={persons} handledeletion={handledeletion} />}
       </section>
     </div>
   )

@@ -1,5 +1,5 @@
 
-const ShowAllPersons = ({data, handleDelition}) => {  
+const ShowAllPersons = ({data, handledeletion}) => {  
 
   return (
       <ul>
@@ -8,7 +8,7 @@ const ShowAllPersons = ({data, handleDelition}) => {
             return (
               <li key={person.id} style={{display: "flex", marginBottom: ".5rem", paddingBottom: ".25rem", borderBottom: ".5px solid gainsboro"}}>
                 <span style={{flex: "1 auto"}}>{person.name}{person.phone && ` - ${person.phone}`}</span>
-                <button onClick={ () => handleDelition(person.id)}>Delete</button>
+                <button onClick={ () => handledeletion(person.id)}>Delete</button>
               </li>
             )
         })
