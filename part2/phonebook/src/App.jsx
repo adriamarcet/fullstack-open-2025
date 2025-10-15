@@ -2,14 +2,14 @@ import { useEffect, useState } from 'react'
 import Filter from './Components/Filter';
 import AddNewPerson from './Components/AddNewPerson';
 import ShowAllPersons from './Components/ShowAllPersons';
-import { getAllFromCharacters, createNewFromCharacters } from './services/characters';
+import { getAllFromCharacters, createNewFromCharacters, deleteFromCharacters } from './services/characters';
 
 const App = () => {
   const [persons, setPersons] = useState([])
   
   useEffect(() => {  
     getAllFromCharacters().then(dataFromCharacters => setPersons(dataFromCharacters))
-    }, [])
+  }, [])
 
   const [newName, setNewName] = useState('')
   const [newPhone, setNewPhone] = useState('')
@@ -18,7 +18,14 @@ const App = () => {
   const handleNewName = event => setNewName(event.target.value);
   const handleNewPhone = event => setNewPhone(event.target.value);
   const handleSearch = event => setSearch(event.target.value);
-  
+  const handleDelition = id => {
+    const match = persons.filter(person => person.id === id) 
+    const name = match[0].name;
+
+    window.confirm(`Beware for ${name} will be deleted. May we proceed with this delition?`) && 
+      deleteFromCharacters(id).then(() => getAllFromCharacters().then(dataFromCharacters => setPersons(dataFromCharacters)))
+  }
+
   const enterNewAddition = (event) => {
     event.preventDefault();
 
@@ -40,7 +47,6 @@ const App = () => {
 
     createNewFromCharacters(newCharacterAddition)
       .then(returnedData => {
-        console.log('response from axios payload post', returnedData);
         setPersons(persons.concat(returnedData));
         setNewName('');
         setNewPhone('');
@@ -66,7 +72,8 @@ const App = () => {
       </section>
       <section>
         <h2>Numbers</h2>
-        <ShowAllPersons data={persons} />
+        { persons.length === 0 && <p>Anyone here, sorry</p>}
+        { persons.length > 0 && <ShowAllPersons data={persons} handleDelition={handleDelition} />}
       </section>
     </div>
   )

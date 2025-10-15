@@ -1,70 +1,10 @@
 {
   "characters": [
     {
-      "id": "9f87",
-      "name": "Adrià Marcet Rovira",
-      "phone": "123456789",
+      "id": "9512",
+      "name": "Arto Hellas 2",
+      "phone": "",
       "important": false
-    },
-    {
-      "id": "5a8b",
-      "name": "Larry Langosta",
-      "phone": "555-GYM-100",
-      "important": false
-    },
-    {
-      "id": "6ad0",
-      "name": "Tritón Man",
-      "phone": "555-OLD-555",
-      "important": true
-    },
-    {
-      "id": "446e",
-      "name": "Chico Percebe",
-      "phone": "555-OLD-444",
-      "important": true
-    },
-    {
-      "id": "c32c",
-      "name": "Judy",
-      "phone": "555-INCIDENTAL-141",
-      "important": true
-    },
-    {
-      "id": "fd43",
-      "name": "Sadie",
-      "phone": "555-INCIDENTAL-47",
-      "important": true
-    },
-    {
-      "id": "1142",
-      "name": "Lou",
-      "phone": "555-INCIDENTAL-39",
-      "important": false
-    },
-    {
-      "id": "c05f",
-      "name": "Bob Esponja Pantalones Cuadrados",
-      "phone": "555-KRAB-001",
-      "important": false
-    },
-    {
-      "id": "3d21",
-      "name": "Patricio Estrella",
-      "phone": "555-ROCK-002",
-      "important": false
-    },
-    {
-      "id": "8003",
-      "name": "Gary el Caracol",
-      "phone": "555-MEOW-006",
-      "important": true
-    },
-    {
-      "id": "f2a2",
-      "name": "Don Cangrejo Krabs",
-      "phone": "555-MONE-005",
-      "important": true
     }
   ]
 }

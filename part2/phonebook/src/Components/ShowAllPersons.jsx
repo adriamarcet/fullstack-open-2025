@@ -1,9 +1,16 @@
-const ShowAllPersons = ({data}) => {  
+
+const ShowAllPersons = ({data, handleDelition}) => {  
+
   return (
       <ul>
         {
           data.map(person => {
-            return <li key={person.id}>{person.name}{person.phone && ` - ${person.phone}`}</li>
+            return (
+              <li key={person.id} style={{display: "flex", marginBottom: ".5rem", paddingBottom: ".25rem", borderBottom: ".5px solid gainsboro"}}>
+                <span style={{flex: "1 auto"}}>{person.name}{person.phone && ` - ${person.phone}`}</span>
+                <button onClick={ () => handleDelition(person.id)}>Delete</button>
+              </li>
+            )
         })
         }
       </ul>

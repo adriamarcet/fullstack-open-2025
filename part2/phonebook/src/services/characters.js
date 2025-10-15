@@ -11,4 +11,9 @@ const createNewFromCharacters = newAddition => {
     return request.then(response => response.data)
 };
 
-export default { getAllFromCharacters, createNewFromCharacters };
+const deleteFromCharacters = id => {
+    const request = axios.delete(`${baseUrl}/${id}`);
+    return request.then(response => response.data)
+}
+
+export { getAllFromCharacters, createNewFromCharacters, deleteFromCharacters };
