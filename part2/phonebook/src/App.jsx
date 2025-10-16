@@ -15,6 +15,11 @@ const App = () => {
   const [newPhone, setNewPhone] = useState('')
   const [search, setSearch] = useState('')
 
+  const clearInputs = () => {
+    setNewName('');
+    setNewPhone('');
+  };
+
   const handleNewName = event => setNewName(event.target.value);
   const handleNewPhone = event => setNewPhone(event.target.value);
   const handleSearch = event => setSearch(event.target.value);
@@ -27,12 +32,17 @@ const App = () => {
   }
 
   const handleUpdateAddition = (addition) => {
-    if(window.confirm(`This ${addition.name} is already entered. Do you want to update they phone number?` )) {
+    if(window.confirm(`This ${addition.name} is already entered. Do you want to update their phone number?` )) {
       const match = persons.find(person => person.name === addition.name);
       const matchUpdated = {...match, phone: addition.phone}
 
       updateFromCharacters(match.id, addition).then(() => {
         setPersons(persons.map(person => person.id === match.id ? matchUpdated : person))
+        clearInputs();
+      }).catch(error => {
+        alert(`An error occurred when updating reference for ${match.name}. Please try again later.`)
+        console.log('error.messages ', error.message);
+        
       })
     }
   }
@@ -68,8 +78,10 @@ const App = () => {
     createNewFromCharacters(newCharacterAddition)
       .then(returnedData => {
         setPersons(persons.concat(returnedData));
-        setNewName('');
-        setNewPhone('');
+        clearInputs();
+    }).catch(error => {
+      alert(`An error occurred when creating a reference for ${newCharacterAddition.name}. Please try again later.`)
+      console.log('error.message', error.message);
     })
   }
 
