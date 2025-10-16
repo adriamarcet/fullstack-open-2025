@@ -6,3 +6,7 @@
     top: 4vh;
     width: 70vw;
 }
+
+.notification--error {
+    outline-color: red;
+}

@@ -7,6 +7,7 @@ import { getAllFromCharacters, createNewFromCharacters, deleteFromCharacters, up
 
 const App = () => {
   const [message, setMessage] = useState(null)
+  const [errorMessage, setErrorMessage] = useState(null)
   const [persons, setPersons] = useState([])
   
   useEffect(() => {  
@@ -27,6 +28,11 @@ const App = () => {
     setTimeout(() => setMessage(null), 5000);
   };
 
+  const handleErrorMessage = newMessage => {
+    setErrorMessage(newMessage);
+    setTimeout(() => setErrorMessage(null), 5000);
+  }
+
   const handleNewName = event => setNewName(event.target.value);
   const handleNewPhone = event => setNewPhone(event.target.value);
   const handleSearch = event => setSearch(event.target.value);
@@ -41,8 +47,8 @@ const App = () => {
         handleMessage(`The entry for ${name} has been deleted.`);
       })
       .catch(error => {
-        alert(`An error occurred when deleting reference for ${name}. Please try again later.`);
-        console.log('error.messages ', error.message);
+        handleErrorMessage(`An error occurred when deleting reference for ${name}. Please try again later. - Error code: ${error.code} - Error status: ${error.status}`);
+        console.log('error.messages ', error);
       });
     }
   }
@@ -57,8 +63,9 @@ const App = () => {
         clearInputs();
         handleMessage(`The entry for ${addition.name} has been updated.`)
       }).catch(error => {
-        alert(`An error occurred when updating reference for ${match.name}. Please try again later.`)
-        console.log('error.messages ', error.message);
+        handleErrorMessage(`
+          An error occurred when updating reference for ${match.name}. Please try again later. - Error code: ${error.code} - Error status: ${error.status}`)
+        console.log('error.messages ', error);
       })
     }
   }
@@ -97,7 +104,7 @@ const App = () => {
         clearInputs();
         handleMessage(`New entry for ${returnedData.name} has been added.`)
     }).catch(error => {
-      alert(`An error occurred when creating a reference for ${newCharacterAddition.name}. Please try again later.`)
+      handleErrorMessage(`An error occurred when creating a reference for ${newCharacterAddition.name}. Please try again later.`)
       console.log('error.message', error.message);
     })
   }
@@ -105,7 +112,8 @@ const App = () => {
   return (
     <div>
       <h1>Phonebook</h1>
-      <Notification message={message} />
+      <Notification data={message} />
+      <Notification data={errorMessage} type='error' />
       <section>
         <h2>Search a name</h2>
         <Filter search={search} data={persons} handleSearch={handleSearch} />
