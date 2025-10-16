@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import Filter from './Components/Filter';
 import AddNewPerson from './Components/AddNewPerson';
 import ShowAllPersons from './Components/ShowAllPersons';
-import { getAllFromCharacters, createNewFromCharacters, deleteFromCharacters } from './services/characters';
+import { getAllFromCharacters, createNewFromCharacters, deleteFromCharacters, updateFromCharacters } from './services/characters';
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -26,6 +26,17 @@ const App = () => {
       deleteFromCharacters(id).then(() => setPersons(persons.filter(person => person.id !== id )))
   }
 
+  const handleUpdateAddition = (addition) => {
+    if(window.confirm(`This ${addition.name} is already entered. Do you want to update they phone number?` )) {
+      const match = persons.find(person => person.name === addition.name);
+      const matchUpdated = {...match, phone: addition.phone}
+
+      updateFromCharacters(match.id, addition).then(() => {
+        setPersons(persons.map(person => person.id === match.id ? matchUpdated : person))
+      })
+    }
+  }
+
   const enterNewAddition = (event) => {
     event.preventDefault();
 
@@ -35,13 +46,22 @@ const App = () => {
       important: Math.random() < 0.5
     }
     
-    if(persons.some(person => person.name === newCharacterAddition.name)) {
+    if(persons.some(person => {
+      return person.name === newCharacterAddition.name && person.phone === newCharacterAddition.phone
+    })) {
       window.alert(`
         ⚠️
 
         ${newCharacterAddition.name} already entered. 
         Please try a different one.
       ` )
+      return
+    }
+
+    if(persons.some(person => {
+      return person.name === newCharacterAddition.name && person.phone !== newCharacterAddition.phone
+    })) {
+      handleUpdateAddition(newCharacterAddition);
       return
     }
 

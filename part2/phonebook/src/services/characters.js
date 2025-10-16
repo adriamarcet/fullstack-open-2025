@@ -16,4 +16,9 @@ const deleteFromCharacters = id => {
     return request.then(response => response.data)
 }
 
-export { getAllFromCharacters, createNewFromCharacters, deleteFromCharacters };
+const updateFromCharacters = (id, newData) => {
+    const request = axios.put(`${baseUrl}/${id}`, newData)
+    return request.then(response => response.data);
+}
+
+export { getAllFromCharacters, createNewFromCharacters, deleteFromCharacters, updateFromCharacters };
