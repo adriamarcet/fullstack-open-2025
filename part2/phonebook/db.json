@@ -1,22 +1,10 @@
 {
   "characters": [
     {
-      "id": "9512",
-      "name": "Arto Hellas 2",
+      "id": "17de",
+      "name": "Don Cangrejo Krabs",
       "phone": "",
-      "important": false
-    },
-    {
-      "name": "Arto Hellas",
-      "phone": "555-OLD-558",
-      "important": false,
-      "id": "5569"
-    },
-    {
-      "name": "Tritón Man",
-      "phone": "555-OLD-555",
-      "important": false,
-      "id": "3748"
+      "important": true
     }
   ]
 }

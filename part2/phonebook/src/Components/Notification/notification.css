@@ -1,0 +1,8 @@
+.notification {
+    background-color: white;
+    outline:  thick double skyblue;
+    padding: .5rem;
+    position: fixed;
+    top: 4vh;
+    width: 70vw;
+}

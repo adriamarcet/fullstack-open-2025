@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react'
+import Notification from './Components/Notification/Notification';
 import Filter from './Components/Filter';
 import AddNewPerson from './Components/AddNewPerson';
 import ShowAllPersons from './Components/ShowAllPersons';
 import { getAllFromCharacters, createNewFromCharacters, deleteFromCharacters, updateFromCharacters } from './services/characters';
 
 const App = () => {
+  const [message, setMessage] = useState(null)
   const [persons, setPersons] = useState([])
   
   useEffect(() => {  
@@ -20,6 +22,11 @@ const App = () => {
     setNewPhone('');
   };
 
+  const handleMessage = newMessage => {
+    setMessage(newMessage)
+    setTimeout(() => setMessage(null), 5000);
+  };
+
   const handleNewName = event => setNewName(event.target.value);
   const handleNewPhone = event => setNewPhone(event.target.value);
   const handleSearch = event => setSearch(event.target.value);
@@ -29,6 +36,7 @@ const App = () => {
 
     window.confirm(`Beware for ${name} will be deleted. May we proceed with this deletion?`) && 
       deleteFromCharacters(id).then(() => setPersons(persons.filter(person => person.id !== id )))
+      handleMessage(`The entry for ${name} has been deleted.`)
   }
 
   const handleUpdateAddition = (addition) => {
@@ -39,10 +47,10 @@ const App = () => {
       updateFromCharacters(match.id, addition).then(() => {
         setPersons(persons.map(person => person.id === match.id ? matchUpdated : person))
         clearInputs();
+        handleMessage(`The entry for ${addition.name} has been updated.`)
       }).catch(error => {
         alert(`An error occurred when updating reference for ${match.name}. Please try again later.`)
         console.log('error.messages ', error.message);
-        
       })
     }
   }
@@ -79,6 +87,7 @@ const App = () => {
       .then(returnedData => {
         setPersons(persons.concat(returnedData));
         clearInputs();
+        handleMessage(`New entry for ${returnedData.name} has been added.`)
     }).catch(error => {
       alert(`An error occurred when creating a reference for ${newCharacterAddition.name}. Please try again later.`)
       console.log('error.message', error.message);
@@ -88,6 +97,7 @@ const App = () => {
   return (
     <div>
       <h1>Phonebook</h1>
+      <Notification message={message} />
       <section>
         <h2>Search a name</h2>
         <Filter search={search} data={persons} handleSearch={handleSearch} />
