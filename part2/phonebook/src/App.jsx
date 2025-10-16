@@ -34,9 +34,17 @@ const App = () => {
     const match = persons.filter(person => person.id === id) 
     const name = match[0].name;
 
-    window.confirm(`Beware for ${name} will be deleted. May we proceed with this deletion?`) && 
-      deleteFromCharacters(id).then(() => setPersons(persons.filter(person => person.id !== id )))
-      handleMessage(`The entry for ${name} has been deleted.`)
+    if (window.confirm(`Beware for ${name} will be deleted. May we proceed with this deletion?`)) {
+      deleteFromCharacters(id)
+      .then(() => {
+        setPersons(persons.filter(person => person.id !== id));
+        handleMessage(`The entry for ${name} has been deleted.`);
+      })
+      .catch(error => {
+        alert(`An error occurred when deleting reference for ${name}. Please try again later.`);
+        console.log('error.messages ', error.message);
+      });
+    }
   }
 
   const handleUpdateAddition = (addition) => {
