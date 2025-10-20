@@ -9,8 +9,6 @@ const Searchresults = ({data, query}) => {
     }
     
     if(hasQuery() && hasData()) {
-        console.log('data length', data.length);
-        
         if(data.length <= 10 && data.length > 1 ) {
             console.log('hey mes de 1 menys de 10');
 
@@ -22,18 +20,33 @@ const Searchresults = ({data, query}) => {
                 </ul>
             )
         } else if(data.length <= 10 && data.length === 1) {
-            console.log('hey 1');
+            console.log('data', data[0]);
+            
             
             return (
                 <>
                     {
                         data.map((result) => {
+                            const languages = Object.values(result.languages);
+
                             return <article key={`${result.area}_${result.latlng[0]}${result.latlng[1]}`}>
                                 <h1>{result.name.common}</h1>
                                 <ul>
                                     <li>Capital: {result.capital[0]}</li>
                                     <li>Area: {result.area}</li>
-                                    <li>Spoken language: {Object.values(result.languages)[0]}</li>
+                                    <li>Spoken language: 
+                                        {
+                                            languages.length > 1 ? (
+                                                <ul>
+                                                    {
+                                                        languages.map((l, idx) => <li key={idx}>{l}</li>)
+                                                    }
+                                                </ul>
+                                            ) : (
+                                                <span>{languages[0]}</span>
+                                            )
+                                        }
+                                    </li>
                                 </ul>
                                 <p style={{"display": "flex", "flex-direction": "column"}}>
                                     <span>Flag:</span>

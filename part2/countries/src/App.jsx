@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from 'axios';
-import Searchresults from "./components/SearchResults";
+import SearchResults from "./components/SearchResults";
 
 function App() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -10,7 +10,7 @@ function App() {
   useEffect(() => {
     axios.get('https://studies.cs.helsinki.fi/restcountries/api/all')
         .then(response => response.data).then(result => setCountries(result))
-  }, [searchQuery]);
+  }, []);
 
   const handleSearch = event => {
     const newQuery = event.target.value;
@@ -39,7 +39,7 @@ function App() {
           <input id="search" type="search" value={searchQuery} onChange={ e => handleSearch(e)} />
         </fieldset>
         <div>
-          <Searchresults data={searchResults} query={searchQuery} />
+          <SearchResults data={searchResults} query={searchQuery} />
         </div>
       </section>
     </>
