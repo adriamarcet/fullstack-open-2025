@@ -10,7 +10,7 @@ function App() {
   useEffect(() => {
     axios.get('https://studies.cs.helsinki.fi/restcountries/api/all')
         .then(response => response.data).then(result => setCountries(result))
-  }, []);
+  }, [searchQuery]);
 
   const handleSearch = event => {
     const newQuery = event.target.value;
@@ -21,12 +21,16 @@ function App() {
         const commonName = country.name.common;
         return commonName.toLowerCase().includes(newQuery.toLowerCase())
       })
-      console.log('matches', matches);
-      
+
       setSearchResults(matches);
     }else {
       setSearchResults([]);
     }
+  }
+
+  const handleShowSingle = result => {
+    setSearchQuery(result.name.common)
+    setSearchResults([result])
   }
 
   return (
@@ -39,7 +43,7 @@ function App() {
           <input id="search" type="search" value={searchQuery} onChange={ e => handleSearch(e)} />
         </fieldset>
         <div>
-          <SearchResults data={searchResults} query={searchQuery} />
+          <SearchResults data={searchResults} query={searchQuery} handleShowSingle={handleShowSingle} />
         </div>
       </section>
     </>
