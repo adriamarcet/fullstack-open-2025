@@ -5,7 +5,7 @@ const CountryInfo = ({data: result}) => {
         <article>
             <h1>{result.name.common}</h1>
             <ul>
-                <li>Capital: {!!result.capital[0] && result.capital[0]}</li>
+                <li>Capital: {result.capital?.[0] || 'N/A'}</li>
                 <li>Area: {result.area}</li>
                 <li>
                     {
