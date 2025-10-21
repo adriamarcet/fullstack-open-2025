@@ -1,6 +1,6 @@
 import CountryInfo from './CountryInfo';
 
-const Searchresults = ({data, query, handleShowSingle}) => {
+const SearchResults = ({data, query, handleShowSingle}) => {
     const hasData = () => data.length !== 0;
     const hasQuery = () => query.length !== 0;
 
@@ -46,4 +46,4 @@ const Searchresults = ({data, query, handleShowSingle}) => {
     }
 }
 
-export default Searchresults;
+export default SearchResults;

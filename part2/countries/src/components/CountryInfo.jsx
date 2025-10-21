@@ -2,21 +2,27 @@ const CountryInfo = ({data: result}) => {
     const languages = Object.values(result.languages);
     
     return (
-        <article key={`${result.area}_${result.latlng[0]}${result.latlng[1]}`}>
+        <article>
             <h1>{result.name.common}</h1>
             <ul>
-                <li>Capital: {result.capital[0]}</li>
+                <li>Capital: {!!result.capital[0] && result.capital[0]}</li>
                 <li>Area: {result.area}</li>
-                <li>Spoken language: 
+                <li>
                     {
                         languages.length > 1 ? (
-                            <ul>
-                                {
-                                    languages.map((l, idx) => <li key={idx}>{l}</li>)
-                                }
-                            </ul>
+                            <>
+                                <span>Spoken languages: </span>
+                                <ul>
+                                    {
+                                        languages.map((l, idx) => <li key={idx}><span>{l}</span></li>)
+                                    }
+                                </ul>
+                            </>
                         ) : (
-                            <span>{languages[0]}</span>
+                            <>
+                                <span>Spoken language: </span>
+                                <span>{languages[0]}</span>
+                            </>
                         )
                     }
                 </li>
