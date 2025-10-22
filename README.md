@@ -28,7 +28,7 @@ This repository is organized by course parts, each focusing on different aspects
 - Rendering collections and forms
 - Server communication
 - Adding styles to React apps
-- **Current Status:** 🔄 In Progress - Exercise 2.1
+- **Current Status:** ✅ Completed
 
 ### Part 3: Programming a server with NodeJS and Express
 - Node.js and Express
@@ -117,8 +117,10 @@ This repository is organized by course parts, each focusing on different aspects
   - [x] Exercise 1.3-1.5: Course information refactoring
   - [x] Exercise 1.6-1.11: Unicafe feedback app
   - [x] Exercise 1.12-1.14: Anecdotes app
-- [x] Part 2: In Progress 🔄
-  - [x] Exercise 2.1: Course information step 6
+- [x] Part 2: Completed ✅
+  - [x] Exercise 2.1-2.5: Course information (courseinfo)
+  - [x] Exercise 2.6-2.17: Phonebook app with server communication
+  - [x] Exercise 2.18-2.20: Countries data app
 - [ ] Part 3: Not started
 - [ ] Part 4: Not started
 - [ ] Part 5: Not started
