@@ -6,7 +6,7 @@ const CountryInfo = ({data: result}) => {
     const languages = Object.values(result.languages);
     const capitalName = result.capital?.[0] || 'N/A';
     const [coords, setCoords] = useState({ lat: null, lon: null });
-    const [currentWeather, setCurrentWeather] = useState({temp: null, sky: null, wind_speed: null})
+    const [currentWeather, setCurrentWeather] = useState({temp: null, sky: null, icon: null})
 
     useEffect(() => {
         getCityGeoCode(result.capital, result.cca2)
@@ -64,15 +64,15 @@ const CountryInfo = ({data: result}) => {
                 <span>Flag:</span>
                 <span style={{"fontSize": "5rem"}}>{result.flag}</span>
             </p>
-            { currentWeather !== null ? (
+            { currentWeather.temp !== null ? (
                 <section>
                     <h2>Weather in {capitalName}</h2>
                     <ul>
-                        <li>Temperature: {currentWeather.temp} C </li>
+                        <li>Temperature: {currentWeather.temp} °C </li>
                         <li>
                             <span>Sky: </span>
                             <span>{currentWeather.sky}</span>
-                            <span><img src={`https://openweathermap.org/img/wn/${currentWeather.icon}@2x.png`} /></span>
+                            <span><img src={`https://openweathermap.org/img/wn/${currentWeather.icon}@2x.png`} alt="icon for this weather" /></span>
                         </li>
                     </ul>
                 </section>

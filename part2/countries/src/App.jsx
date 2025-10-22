@@ -10,7 +10,7 @@ function App() {
   useEffect(() => {
     axios.get('https://studies.cs.helsinki.fi/restcountries/api/all')
         .then(response => response.data).then(result => setCountries(result))
-  }, [searchQuery]);
+  }, []);
 
   const handleSearch = event => {
     const newQuery = event.target.value;
