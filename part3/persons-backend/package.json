@@ -1,0 +1,16 @@
+{
+  "name": "persons-backend",
+  "version": "0.0.0",
+  "description": "Backend for Phonebook app",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node --watch index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Adrià Marcet",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
