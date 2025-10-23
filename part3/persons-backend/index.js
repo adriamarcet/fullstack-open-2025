@@ -32,16 +32,10 @@ app.get('/api/persons', (request, response) => {
     response.send(persons)
 })
 
-app.get('/api/info', (request, response) => {
+app.get('/info', (request, response) => {
     const number_determinant = persons.length > 1 ? `people` : `person`;
+    const requestDate = new Date(Date.now()).toUTCString();
 
-    let requestDate = response.get('Date');
-    console.log('requestDate', requestDate);
-    if (!requestDate) {
-        requestDate = new Date().toUTCString();
-        response.set('Date', requestDate);
-    }
-    
     response.send(`
         <p>Phonebook has info for ${persons.length} ${number_determinant}</p>
         <p>${requestDate}</p>
