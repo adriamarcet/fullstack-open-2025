@@ -88,9 +88,21 @@ app.post('/api/persons', (request, response) => {
         })
     }
 
+    if(!body.name) {
+        return response.status(400).json({
+            error: 'No name given'
+        })
+    }
+
+    if(!body.number) {
+        return response.status(400).json({
+            error: 'No number given'
+        })
+    }
+
     const nameMatch = persons.filter(person => person.name === body.name);
 
-    if(nameMatch) {
+    if(nameMatch.length > 0) {
         return response.status(400).json({
             error: "Given Name has an exact match"
         })
@@ -101,6 +113,6 @@ app.post('/api/persons', (request, response) => {
         "number": body.number,
         "id": generateId()
     };
-
+    persons = persons.concat(person);
     response.json(person)
 });
