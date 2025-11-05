@@ -5,7 +5,7 @@ const app = express();
 
 app.use(express.json());
 
-app.use(morgan('combined'));
+app.use(morgan('tiny'));
 
 app.get('/', (request, response) => {
     response.send('<h1>Hello world from express server</h1>')
