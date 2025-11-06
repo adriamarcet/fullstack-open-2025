@@ -4,6 +4,7 @@ const express = require('express');
 const app = express();
 
 app.use(express.json());
+app.use(morgan('tiny'));
 
 morgan.token('tellme', function (req, res) {
     const requestHost = JSON.stringify(req.host);
