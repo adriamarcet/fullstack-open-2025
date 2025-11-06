@@ -5,7 +5,29 @@ const app = express();
 
 app.use(express.json());
 
-app.use(morgan('tiny'));
+morgan.token('tellme', function (req, res) {
+    const requestHost = JSON.stringify(req.host);
+    const requestOriginUrl = JSON.stringify(req.url);
+    const requestMethod = JSON.stringify(req.method);
+    const requestBody = JSON.stringify(req.body);
+    
+    const responseContentType = JSON.stringify(res.get('Content-Type'));
+    const responseStatus = res._header ? res.statusCode : undefined;
+    
+    return `
+        Request info: 
+            Method - ${requestMethod}
+            Origin URL - ${requestOriginUrl}
+            Host - ${requestHost}
+            Body - ${requestBody}
+            
+        Response info:
+            Content Type - ${responseContentType}
+            Status - ${responseStatus}
+    `;
+})
+
+app.use(morgan(':tellme :response-time'))
 
 app.get('/', (request, response) => {
     response.send('<h1>Hello world from express server</h1>')
@@ -63,7 +85,7 @@ const generateId = () => {
 
 app.post('/api/persons', (request, response) => {
     const body = request.body;
-    
+
     if(!body) {
         return response.status(400).json({
             error: 'No information given'
