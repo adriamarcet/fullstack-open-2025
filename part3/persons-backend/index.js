@@ -2,7 +2,9 @@ let persons = require('./data.json');
 let morgan = require('morgan');
 const express = require('express');
 const app = express();
+const cors = require('cors')
 
+app.use(cors());
 app.use(express.json());
 app.use(morgan('tiny'));
 
@@ -101,7 +103,7 @@ app.post('/api/persons', (request, response) => {
 
     if(!body.number) {
         return response.status(400).json({
-            error: 'No number given'
+            error: 'No phone number given'
         })
     }
 

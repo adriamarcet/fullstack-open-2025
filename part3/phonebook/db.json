@@ -1,0 +1,28 @@
+{
+  "characters": [
+    {
+      "id": "0cf1",
+      "name": "Bob Esponja Pantalones Cuadrados",
+      "phone": "555-KRAB-001",
+      "important": false
+    },
+    {
+      "id": "adf0",
+      "name": "Patricio Estrella",
+      "phone": "555-ROCK-002",
+      "important": true
+    },
+    {
+      "id": "320c",
+      "name": "Sheldon J. Plankton",
+      "phone": "555-EVIL-008",
+      "important": false
+    },
+    {
+      "id": "83ed",
+      "name": "Perla Krabs",
+      "phone": "555-KRAB-001",
+      "important": true
+    }
+  ]
+}
