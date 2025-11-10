@@ -4,14 +4,15 @@
   "description": "Backend for Phonebook app",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
+    "build:ui": "rm -rf dist && cd ../phonebook && npm run build && cp -r dist ../persons-backend",
+    "build:full": "npm run build:ui && rsync -av --delete --exclude 'node_modules' --exclude '.git' . ../../../01.fullstack-open-render-test/ && cd ../../../01.fullstack-open-render-test && git add . && git commit -m 'Update backend' && git push origin main",
     "dev": "node --watch index.js",
+    "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Adrià Marcet",
   "license": "ISC",
   "dependencies": {
-    "cors": "^2.8.5",
     "express": "^5.1.0",
     "morgan": "^1.10.1"
   }

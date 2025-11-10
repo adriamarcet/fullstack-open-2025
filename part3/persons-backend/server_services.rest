@@ -8,3 +8,15 @@ content-type: application/json
     "name": "sample 29",
     "number": "040-123456"
 }
+
+###
+POST https://fullopenstack-part3-render-test.onrender.com/api/persons/ HTTP/1.1
+content-type: application/json
+
+{
+    "name": "Sample ID from VSCode REST Client",
+    "number": "040-123456"
+}
+
+###
+DELETE https://fullopenstack-part3-render-test.onrender.com/api/persons/9
