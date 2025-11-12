@@ -21,14 +21,16 @@ mongoose.connect(url)
   .then(() => console.log('Connected to MongoDB'))
   .catch(err => console.error('Connection error:', err));
 
-
 const givenName = process.argv[3];
 const givenNumber = process.argv[4];
 
 if(!givenName && !givenNumber) {
     Person.find({}).then(result => {
         result.forEach(person => {
-            console.log(person)
+            console.log(`
+                Name: ${person.name} 
+                Number: ${person.number}
+            `)
         })
         mongoose.connection.close()
         return;
@@ -43,6 +45,6 @@ const person = new Person({
 })
 
 person.save().then(result => {
-    console.log('is saved');
+    console.log(`Added ${givenName} number ${givenNumber} to phonebook`);
     mongoose.connection.close()
 })
