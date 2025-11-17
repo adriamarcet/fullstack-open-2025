@@ -1,3 +1,8 @@
+require('dotenv').config()
+
+const Person = require('./models/person');
+const PORT = process.env.PORT;
+
 let persons = require('./data.json');
 let morgan = require('morgan');
 const express = require('express');
@@ -36,7 +41,9 @@ app.get('/', (request, response) => {
 });
 
 app.get('/api/persons', (request, response) => {
-    response.send(persons)
+    Person.find({}).then(persons => {
+        response.json(persons)
+    })
 })
 
 app.get('/info', (request, response) => {
@@ -49,33 +56,42 @@ app.get('/info', (request, response) => {
     `)
 })
 
-const PORT = process.env.PORT || 3001;
-
 app.listen(PORT, () => {
     console.log('server is running at port ', PORT);
 });
 
 app.get('/api/persons/:id', (request, response) => {
     const id = request.params.id;
-    const match = persons.find(person => person.id === id);
-
-    if(match) {
-        response.json(match)
-    } else {
-        response.status(404).end()
-    }
+    Person.findById(id)
+        .then(person => {
+            if(person) {
+                response.json(person)
+            } else {
+                response.status(404).end()
+            }
+        })
+        .catch(error => {
+            console.log('error', error);
+            response.status(400).send({ error: 'malformatted id' })
+        })
 });
 
-app.delete('/api/persons/:id', (request, response) => {
+app.delete('/api/persons/:id', (request, response, next) => {
     const id = request.params.id;
+    Person.findByIdAndDelete(id)
+        .then(result => {
+            response.status(204).end()
+        })
+        .catch(error => next(error))
+    ;
 
-    const match = persons.find(person => person.id === id);
-    if(match) {
-        persons = persons.filter(person => person.id !== id);
-        response.status(204).end()
-    } else {
-        response.status(404).end()
-    }
+    // const match = persons.find(person => person.id === id);
+    // if(match) {
+    //     persons = persons.filter(person => person.id !== id);
+    //     response.status(204).end()
+    // } else {
+    //     response.status(404).end()
+    // }
 });
 
 const generateId = () => {
@@ -106,19 +122,35 @@ app.post('/api/persons', (request, response) => {
         })
     }
 
-    const nameMatch = persons.filter(person => person.name === body.name);
+    Person.findOne({ name: body.name }).then(existingPerson => {
+        if (existingPerson) {
+            return response.status(400).json({
+                error: "Given Name has an exact match"
+            })
+        }
 
-    if(nameMatch.length > 0) {
-        return response.status(400).json({
-            error: "Given Name has an exact match"
+        const person = new Person({
+            name: body.name,
+            number: body.number
         })
-    }
-    
-    const person = {
-        "name": body.name,
-        "number": body.number,
-        "id": generateId()
-    };
-    persons = persons.concat(person);
-    response.json(person)
+
+        person.save().then(savedPerson => {
+            response.json(savedPerson)
+        }).catch(error => {
+            console.error(error)
+            response.status(500).json({ error: 'saving failed' })
+        })
+    }).catch(error => {
+        console.error(error)
+        response.status(500).json({ error: 'lookup failed' })
+    })
+
+    // const person = {
+    //     "name": body.name,
+    //     "number": body.number,
+    //     "id": generateId()
+    // };
+
+    // persons = persons.concat(person);
+    // response.json(person)
 });
