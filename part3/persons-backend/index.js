@@ -3,7 +3,6 @@ require('dotenv').config()
 const Person = require('./models/person');
 const PORT = process.env.PORT;
 
-let persons = require('./data.json');
 let morgan = require('morgan');
 const express = require('express');
 const app = express();
@@ -57,13 +56,16 @@ app.get('/api/persons', (request, response) => {
 })
 
 app.get('/info', (request, response) => {
-    const number_determinant = persons.length > 1 ? `people` : `person`;
-    const requestDate = new Date(Date.now()).toUTCString();
+    Person.countDocuments({})
+        .then(count => {
+            const number_determinant = count > 1 ? `people` : `person`;
+            const requestDate = new Date(Date.now()).toUTCString();
 
-    response.send(`
-        <p>Phonebook has info for ${persons.length} ${number_determinant}</p>
-        <p>${requestDate}</p>
-    `)
+            response.send(`
+                <p>Phonebook has info for ${count} ${number_determinant}</p>
+                <p>${requestDate}</p>
+            `)
+        })
 })
 
 app.listen(PORT, () => {
