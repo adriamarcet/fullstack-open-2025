@@ -8,6 +8,16 @@ let morgan = require('morgan');
 const express = require('express');
 const app = express();
 
+const errorHandler = (error, request, response, next) => {
+    console.log('error.message ', error.message);
+
+    if(error.name === 'CastError') {
+        return response.status(400).send({ error: 'Custom error handler function says: Malformatted id' })
+    }
+
+    next(error)
+};
+
 app.use(express.json());
 app.use(express.static('dist'))
 app.use(morgan('tiny'));
@@ -60,7 +70,7 @@ app.listen(PORT, () => {
     console.log('server is running at port ', PORT);
 });
 
-app.get('/api/persons/:id', (request, response) => {
+app.get('/api/persons/:id', (request, response, next) => {
     const id = request.params.id;
     Person.findById(id)
         .then(person => {
@@ -70,11 +80,27 @@ app.get('/api/persons/:id', (request, response) => {
                 response.status(404).end()
             }
         })
-        .catch(error => {
-            console.log('error', error);
-            response.status(400).send({ error: 'malformatted id' })
-        })
+        .catch(error => next(error))
 });
+
+app.put('/api/persons/:id', (request, response, next) => {
+  const { name, number } = request.body
+
+  Person.findById(request.params.id)
+    .then(person => {
+      if (!person) {
+        return response.status(404).end()
+      }
+
+      person.name = name
+      person.number = number
+
+      return person.save().then((updatedPerson) => {
+        response.json(updatedPerson)
+      })
+    })
+    .catch(error => next(error))
+})
 
 app.delete('/api/persons/:id', (request, response, next) => {
     const id = request.params.id;
@@ -84,22 +110,7 @@ app.delete('/api/persons/:id', (request, response, next) => {
         })
         .catch(error => next(error))
     ;
-
-    // const match = persons.find(person => person.id === id);
-    // if(match) {
-    //     persons = persons.filter(person => person.id !== id);
-    //     response.status(204).end()
-    // } else {
-    //     response.status(404).end()
-    // }
 });
-
-const generateId = () => {
-  const maxId = persons.length > 0
-    ? Math.max(...persons.map(n => Number(n.id)))
-    : 0
-  return String(maxId + 1)
-}
 
 app.post('/api/persons', (request, response) => {
     const body = request.body;
@@ -144,13 +155,6 @@ app.post('/api/persons', (request, response) => {
         console.error(error)
         response.status(500).json({ error: 'lookup failed' })
     })
-
-    // const person = {
-    //     "name": body.name,
-    //     "number": body.number,
-    //     "id": generateId()
-    // };
-
-    // persons = persons.concat(person);
-    // response.json(person)
 });
+
+app.use(errorHandler)
