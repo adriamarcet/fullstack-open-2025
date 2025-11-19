@@ -104,8 +104,13 @@ const App = () => {
         clearInputs();
         handleMessage(`New entry for ${returnedData.name} has been added.`)
     }).catch(error => {
-      handleErrorMessage(`An error occurred when creating a reference for ${newCharacterAddition.name}. Please try again later.`)
-      console.log('error.message', error.message);
+      handleErrorMessage(`
+        An error occurred when creating a reference for ${newCharacterAddition.name}.
+        "${error.response.data.error}". 
+        
+        Please try again later.
+      `)
+      console.log('error.message ', error.response.data.error);
     })
   }
 
