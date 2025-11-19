@@ -1,93 +1,93 @@
 require('dotenv').config()
 
-const Person = require('./models/person');
-const PORT = process.env.PORT;
+const Person = require('./models/person')
+const PORT = process.env.PORT
 
-let morgan = require('morgan');
-const express = require('express');
-const app = express();
+let morgan = require('morgan')
+const express = require('express')
+const app = express()
 
 const errorHandler = (error, request, response, next) => {
-    console.log('error.message ', error.message);
+  console.log('error.message ', error.message)
 
-    if(error.name === 'CastError') {
-        return response.status(400).send({ error: 'Custom error handler function says: Malformatted id' })
-    } else if (error.name === 'ValidationError') {
-        console.log('error', error);
-        // send the human-readable message string so frontend can display it easily
-        return response.status(400).json({ error: error.message })
-    }
+  if(error.name === 'CastError') {
+    return response.status(400).send({ error: 'Custom error handler function says: Malformatted id' })
+  } else if (error.name === 'ValidationError') {
+    console.log('error', error)
+    // send the human-readable message string so frontend can display it easily
+    return response.status(400).json({ error: error.message })
+  }
 
-    next(error)
-};
+  next(error)
+}
 
-app.use(express.json());
+app.use(express.json())
 app.use(express.static('dist'))
-app.use(morgan('tiny'));
+app.use(morgan('tiny'))
 
 morgan.token('tellme', function (req, res) {
-    const requestHost = JSON.stringify(req.host);
-    const requestOriginUrl = JSON.stringify(req.url);
-    const requestMethod = JSON.stringify(req.method);
-    const requestBody = JSON.stringify(req.body);
-    
-    const responseContentType = JSON.stringify(res.get('Content-Type'));
-    const responseStatus = res._header ? res.statusCode : undefined;
-    
-    return `
-        Request info: 
-            Method - ${requestMethod}
-            Origin URL - ${requestOriginUrl}
-            Host - ${requestHost}
-            Body - ${requestBody}
-            
-        Response info:
-            Content Type - ${responseContentType}
-            Status - ${responseStatus}
-    `;
+  const requestHost = JSON.stringify(req.host)
+  const requestOriginUrl = JSON.stringify(req.url)
+  const requestMethod = JSON.stringify(req.method)
+  const requestBody = JSON.stringify(req.body)
+
+  const responseContentType = JSON.stringify(res.get('Content-Type'))
+  const responseStatus = res._header ? res.statusCode : undefined
+
+  return `
+    Request info: 
+      Method - ${requestMethod}
+      Origin URL - ${requestOriginUrl}
+      Host - ${requestHost}
+      Body - ${requestBody}
+      
+    Response info:
+      Content Type - ${responseContentType}
+      Status - ${responseStatus}
+  `
 })
 
 app.use(morgan(':tellme :response-time'))
 
 app.get('/', (request, response) => {
-    response.send('<h1>Hello world from express server</h1>')
-});
+  response.send('<h1>Hello world from express server</h1>')
+})
 
 app.get('/api/persons', (request, response) => {
-    Person.find({}).then(persons => {
-        response.json(persons)
-    })
+  Person.find({}).then(persons => {
+    response.json(persons)
+  })
 })
 
 app.get('/info', (request, response) => {
-    Person.countDocuments({})
-        .then(count => {
-            const number_determinant = count > 1 ? `people` : `person`;
-            const requestDate = new Date(Date.now()).toUTCString();
+  Person.countDocuments({})
+    .then(count => {
+      const number_determinant = count > 1 ? 'people' : 'person'
+      const requestDate = new Date(Date.now()).toUTCString()
 
-            response.send(`
-                <p>Phonebook has info for ${count} ${number_determinant}</p>
-                <p>${requestDate}</p>
-            `)
-        })
+      response.send(`
+        <p>Phonebook has info for ${count} ${number_determinant}</p>
+        <p>${requestDate}</p>
+      `)
+    })
 })
 
 app.listen(PORT, () => {
-    console.log('server is running at port ', PORT);
-});
+  console.log('server is running at port ', PORT)
+})
 
 app.get('/api/persons/:id', (request, response, next) => {
-    const id = request.params.id;
-    Person.findById(id)
-        .then(person => {
-            if(person) {
-                response.json(person)
-            } else {
-                response.status(404).end()
-            }
-        })
-        .catch(error => next(error))
-});
+  const id = request.params.id
+  Person.findById(id)
+    .then(person => {
+      if(person) {
+        response.json(person)
+      } else {
+        response.status(404).end()
+      }
+    })
+    .catch(error => next(error))
+})
 
 app.put('/api/persons/:id', (request, response, next) => {
   const { name, number } = request.body
@@ -109,61 +109,58 @@ app.put('/api/persons/:id', (request, response, next) => {
 })
 
 app.delete('/api/persons/:id', (request, response, next) => {
-    const id = request.params.id;
-    Person.findByIdAndDelete(id)
-        .then(result => {
-            response.status(204).end()
-        })
-        .catch(error => next(error))
-    ;
-});
+  const id = request.params.id
+  Person.findByIdAndDelete(id)
+    .then(result => {
+      console.log('result', result)
+      response.status(204).end()
+    })
+    .catch(error => next(error))
+})
 
 app.post('/api/persons', (request, response, next) => {
-    const body = request.body;
+  const body = request.body
 
-    if(!body) {
-        return response.status(400).json({
-            error: 'No information given'
-        })
-    }
-
-    if(!body.name) {
-        return response.status(400).json({
-            error: 'No name given'
-        })
-    }
-
-    if(!body.number) {
-        return response.status(400).json({
-            error: 'No phone number given'
-        })
-    }
-
-    Person.findOne({ name: body.name }).then(existingPerson => {
-        if (existingPerson) {
-            return response.status(400).json({
-                error: "Given Name has an exact match"
-            })
-        }
-
-        const person = new Person({
-            name: body.name,
-            number: body.number
-        })
-
-        person.save()
-            .then(savedPerson => {
-                response.json(savedPerson)
-        }).catch(error => {
-            return next(error);
-            console.error(error)
-            window.alert('New addition name has to be longer than 3 characters')
-            // response.status(500).json({ error: 'saving failed' })
-        })
-    }).catch(error => {
-        console.error(error)
-        response.status(500).json({ error: 'lookup failed' })
+  if(!body) {
+    return response.status(400).json({
+      error: 'No information given'
     })
-});
+  }
+
+  if(!body.name) {
+    return response.status(400).json({
+      error: 'No name given'
+    })
+  }
+
+  if(!body.number) {
+    return response.status(400).json({
+      error: 'No phone number given'
+    })
+  }
+
+  Person.findOne({ name: body.name }).then(existingPerson => {
+    if (existingPerson) {
+      return response.status(400).json({
+        error: 'Given Name has an exact match'
+      })
+    }
+
+    const person = new Person({
+      name: body.name,
+      number: body.number
+    })
+
+    person.save()
+      .then(savedPerson => {
+        response.json(savedPerson)
+      }).catch(error => {
+        return next(error)
+      })
+  }).catch(error => {
+    console.error(error)
+    response.status(500).json({ error: 'lookup failed' })
+  })
+})
 
 app.use(errorHandler)
