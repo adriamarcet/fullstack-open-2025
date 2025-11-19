@@ -8,8 +8,23 @@ mongoose.connect(url, { family: 4})
   .catch(err => console.error('Connection error:', err.message));
 
 const personSchema = new mongoose.Schema({
-    name: String,
-    number: String
+    name: {
+        type: String,
+        minlength: [3, 'Name must be at least 3 characters long'],
+        required: [true, 'Name is required']
+    },
+    number: {
+        type: String,
+        minlength: [8, 'Phone number must be at least 8 characters long'],
+        required: [true, 'Phone number is required'],
+        validate: {
+            validator: function(v) {
+                // must be at least 8 characters and match 2 or 3 digits, a dash, then digits
+                return typeof v === 'string' && v.length >= 8 && /^\d{2,3}-\d+$/.test(v);
+            },
+            message: props => `${props.value} is not a valid phone number. Use XX-XXXX... or XXX-XXXX...`
+        }
+    }
 })
 
 personSchema.set('toJSON', {
