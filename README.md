@@ -34,6 +34,7 @@ This repository is organized by course parts, each focusing on different aspects
 - Node.js and Express
 - REST APIs
 - Data storage with MongoDB
+- **Current Status:** ✅ Completed
 
 ### Part 4: Testing Express servers, user administration
 - Testing backend applications
@@ -121,7 +122,9 @@ This repository is organized by course parts, each focusing on different aspects
   - [x] Exercise 2.1-2.5: Course information (courseinfo)
   - [x] Exercise 2.6-2.17: Phonebook app with server communication
   - [x] Exercise 2.18-2.20: Countries data app
-- [ ] Part 3: Not started
+- [x] Part 3: Completed ✅
+  - [x] Implemented persistence for `part3/persons-backend` (writes `data.json` on POST and DELETE)
+  - [x] Fixed id handling and validation in `part3/persons-backend/index.js`
 - [ ] Part 4: Not started
 - [ ] Part 5: Not started
 - [ ] Part 6: Not started
@@ -167,6 +170,6 @@ Each part contains its own setup instructions. Navigate to the specific part dir
 ---
 
 **Learning Journey Started:** September 2025  
-**Last Updated:** October 2025  
-**Current Focus:** Part 2 - Server Communication  
+**Last Updated:** 19 November 2025  
+**Current Focus:** Part 4 - Testing Express servers, user administration  
 **Estimated Completion:** TBD
