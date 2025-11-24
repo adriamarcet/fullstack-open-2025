@@ -1,0 +1,25 @@
+{
+  "name": "blog-list",
+  "version": "0.0.0",
+  "description": "A blog list application, that allows users to save information about interesting blogs they have stumbled across on the internet.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node --watch index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Adrià Marcet",
+  "license": "ISC",
+  "devDependencies": {
+    "@eslint/js": "^9.39.1",
+    "@stylistic/eslint-plugin": "^5.6.1",
+    "eslint": "^9.39.1",
+    "globals": "^16.5.0"
+  },
+  "dependencies": {
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "mongodb": "^7.0.0",
+    "mongoose": "^8.20.0"
+  }
+}
