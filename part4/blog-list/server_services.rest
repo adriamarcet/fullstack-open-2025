@@ -1,17 +1,17 @@
-GET http://localhost:3003/api/blog/6914497b53f83d8bc4b73c3a
+GET http://localhost:3003/api/blogs
 
 ###
-DELETE http://localhost:3003/api/persons/200
+DELETE http://localhost:3003/api/blogs/6968c2214d64f7edf84af7e1
 
 ###
 POST http://localhost:3003/api/blogs/ HTTP/1.1
 content-type: application/json
 
 {
-    "title": "Sample ID from VSCod  e REST Client",
-    "author": "Sample ID from VSCode REST Client",
-    "url": "040-123456",
-    "likes": 5
+    "title": "Cómo hacer una escapada romántica con éxito",
+    "author": "Adrià Marcet",
+    "url": "https://unaurlquesuenebien.com",
+    "likes": 16
 }
 
 ###
@@ -27,4 +27,4 @@ content-type: application/json
 DELETE https://fullopenstack-part3-render-test.onrender.com/api/persons/9
 
 ###
-DELETE http://localhost:3003/api/blog/29
+DELETE http://localhost:3003/api/blogs/29
