@@ -55,7 +55,7 @@ const mostBlogs = blogs => {
  */
 
 const mostLikes = blogs => {
-if (!blogs || blogs.length === 0) return 0
+  if (!blogs || blogs.length === 0) return 0
 
   const counts = blogs.reduce((acc, blog) => {
     acc[blog.author] = (acc[blog.author] || 0) + blog.likes
