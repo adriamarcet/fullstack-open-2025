@@ -7,8 +7,11 @@ const app = require('../app')
 const supertest = require('supertest')
 const api = supertest(app)
 const Blog = require('../models/blog')
+const User = require('../models/user')
 const helper = require('./test_helper')
 const { log } = require('node:console')
+
+let testUser
 
 describe('Our dummy tests first', () => {
   test('dummy returns one', () => {
@@ -19,8 +22,11 @@ describe('Our dummy tests first', () => {
 
 describe('Run all tests', () => {
   beforeEach(async () => {
+    await User.deleteMany({})
+    testUser = await helper.createTestUser()
+
     await Blog.deleteMany({})
-    const blogObjects = helper.initialBlogs.map(blog => new Blog(blog))
+    const blogObjects = helper.initialBlogs.map(blog => new Blog({ ...blog, user: testUser._id }))
     const promiseArray = blogObjects.map(blog => blog.save())
     await Promise.all(promiseArray)
 
@@ -64,7 +70,8 @@ describe('Run all tests', () => {
       const newBlog = {
         title: 'Test Title for POST',
         author: 'Test Author',
-        url: 'http://example.com/test-post'
+        url: 'http://example.com/test-post',
+        userId: testUser._id.toString()
       }
 
       const response = await api
@@ -114,12 +121,13 @@ describe('Run all tests', () => {
 
   describe('when a specific note is modified', () => {
     test('a valid blog can be added', async () => {
-      const newBlog =   {
+      const newBlog = {
         id: '5a422aa71b54a676234d17f8',
         title: 'Go To Statement Considered Harmful',
         author: 'Edsger W. Dijkstra',
         url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
         likes: 5,
+        userId: testUser._id.toString(),
         __v: 0
       }
 

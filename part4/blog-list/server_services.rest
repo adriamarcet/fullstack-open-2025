@@ -1,3 +1,4 @@
+### BLOGS
 GET http://localhost:3003/api/blogs
 
 ###
@@ -6,12 +7,14 @@ DELETE http://localhost:3003/api/blogs/6968c2214d64f7edf84af7e1
 ###
 POST http://localhost:3003/api/blogs/ HTTP/1.1
 content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InNwb25nZWJvYiIsImlkIjoiNjk4OWFiMTE5NzZlZGM0MzViODY5NDE4IiwiaWF0IjoxNzcwNjMxMTc0fQ.zQ36QlGQMjs4ZkaLBkjWCIEgFRDX9Rr6Rdsda4hDTR4
 
 {
-    "title": "Cómo hacer una escapada romántica con éxito",
+    "title": "Cómo hacer una escapada romántica con éxito, quedan un poco menos de dos semanas",
     "author": "Adrià Marcet",
     "url": "https://unaurlquesuenebien.com",
-    "likes": 16
+    "likes": 18,
+    "userId": "6985bec9de4532c389e335dd"
 }
 
 ###
@@ -28,3 +31,25 @@ DELETE https://fullopenstack-part3-render-test.onrender.com/api/persons/9
 
 ###
 DELETE http://localhost:3003/api/blogs/29
+
+### USERS
+GET http://localhost:3003/api/users
+
+###
+POST http://localhost:3003/api/users/ HTTP/1.1
+content-type: application/json
+
+{
+    "username": "spongebob",
+    "name": "Adrià Marcet",
+    "password": "anywilldo1234"
+}
+
+### Login
+POST http://localhost:3003/api/login/
+Content-Type: application/json
+
+{
+    "username": "spongebob",
+    "password": "anywilldo1234"
+}
