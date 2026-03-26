@@ -158,7 +158,7 @@ describe('Run all tests', () => {
       assert.deepStrictEqual(resultBlog.body, blogToView)
     })
 
-    test('a specific blog can be deleted', async () => {
+    test('the user who created a blog can delete it', async () => {
       const blogsAtStart = await helper.blogsInDb()
       const blogToDelete = blogsAtStart[0]
 
@@ -176,7 +176,7 @@ describe('Run all tests', () => {
       assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length - 1)
     })
 
-    test('a specific blog cannot be deleted by another user', async () => {
+    test('a blog cannot be deleted by a user who did not create it', async () => {
       const blogsAtStart = await helper.blogsInDb()
       const blogToDelete = blogsAtStart[0]
 
@@ -189,6 +189,8 @@ describe('Run all tests', () => {
         .expect(401)
 
       const blogsAtEnd = await helper.blogsInDb()
+      const ids = blogsAtEnd.map(b => b.id)
+      assert(ids.includes(blogToDelete.id))
       assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length)
     })
 
