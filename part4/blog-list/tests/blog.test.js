@@ -8,6 +8,7 @@ const supertest = require('supertest')
 const api = supertest(app)
 const Blog = require('../models/blog')
 const User = require('../models/user')
+const jwt = require('jsonwebtoken')
 const helper = require('./test_helper')
 const { log } = require('node:console')
 
@@ -147,6 +148,7 @@ describe('Run all tests', () => {
     test('a specific blog can be viewed', async () => {
       const blogsAtStart = await helper.blogsInDb()
       const blogToView = blogsAtStart[0]
+      blogToView.user = blogToView.user.toString()
 
       const resultBlog = await api
         .get(`/api/blogs/${blogToView.id}`)
@@ -160,8 +162,11 @@ describe('Run all tests', () => {
       const blogsAtStart = await helper.blogsInDb()
       const blogToDelete = blogsAtStart[0]
 
+      const token = jwt.sign({ username: testUser.username, id: testUser._id }, process.env.SECRET)
+
       await api
         .delete(`/api/blogs/${blogToDelete.id}`)
+        .set('Authorization', `Bearer ${token}`)
         .expect(204)
 
       const blogsAtEnd = await helper.blogsInDb()
@@ -169,6 +174,34 @@ describe('Run all tests', () => {
       assert(!ids.includes(blogToDelete.id))
 
       assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length - 1)
+    })
+
+    test('a specific blog cannot be deleted by another user', async () => {
+      const blogsAtStart = await helper.blogsInDb()
+      const blogToDelete = blogsAtStart[0]
+
+      const otherUser = await helper.createTestUser()
+      const otherToken = jwt.sign({ username: otherUser.username, id: otherUser._id }, process.env.SECRET)
+
+      await api
+        .delete(`/api/blogs/${blogToDelete.id}`)
+        .set('Authorization', `Bearer ${otherToken}`)
+        .expect(401)
+
+      const blogsAtEnd = await helper.blogsInDb()
+      assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length)
+    })
+
+    test('deletion fails with status 401 if token is missing', async () => {
+      const blogsAtStart = await helper.blogsInDb()
+      const blogToDelete = blogsAtStart[0]
+
+      await api
+        .delete(`/api/blogs/${blogToDelete.id}`)
+        .expect(401)
+
+      const blogsAtEnd = await helper.blogsInDb()
+      assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length)
     })
 
     test('a specific blog can be updated', async () => {

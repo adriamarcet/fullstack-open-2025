@@ -37,8 +37,13 @@ usersRouter.post('/', async (request, response) => {
 usersRouter.get('/', async (request, response) => {
   const users = await User
     .find({})
-    .populate('blogs', { title: 1 })
+    .populate('blogs')
   response.json(users)
+})
+
+usersRouter.delete('/:id', async (request, response) => {
+  await User.findByIdAndDelete(request.params.id)
+  response.status(204).end()
 })
 
 module.exports = usersRouter

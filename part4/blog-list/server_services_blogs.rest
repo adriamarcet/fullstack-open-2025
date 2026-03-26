@@ -1,0 +1,37 @@
+### BLOGS: list
+GET http://localhost:3003/api/blogs
+
+### BLOGS: delete
+DELETE http://localhost:3003/api/blogs/5a422a851b54a676234d17f7
+
+### BLOGS: post
+POST http://localhost:3003/api/blogs/ HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InNwb25nZWJvYiIsImlkIjoiNjliYmNmMDQ1MmM3MjYyODNkMzBmOTNlIiwiaWF0IjoxNzc0MzQzODE1LCJleHAiOjE3NzQzNDQ0MTV9._MQU_9GuWl6tULQ5T236iQdZvZDPZVDM0JZZCds806o
+
+{
+    "title": "Cómo hacer una escapada romántica con éxito, creo que quedan un poco menos de dos semanas",
+    "author": "Adrià Marcet",
+    "url": "https://unaurlquesuenebien.com",
+    "likes": 18,
+    "user": "69bbcf0452c726283d30f93e"
+}
+
+### 
+DELETE http://localhost:3003/api/blogs/698af9e7171104cdcab04f80
+content-type: application/json
+Authorization: Bearer 6985bec9de4532c389e335dd
+
+
+### Post blog only if user is logged in
+POST http://localhost:3003/api/blogs/
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IklyYWRhIiwiaWQiOiI2OWMxMjViZWM1YTczYjg5MTEwNGFlMjAiLCJpYXQiOjE3NzQ1Mjc0OTYsImV4cCI6MTc3NDUyODA5Nn0.eReeMO-SkSp_-PqLHBg59vbkAv1ymVjzH0lbSDppO90
+
+{
+    "title": "The new things from vs code 24/03/26",
+    "author": "Irada",
+    "url": "https://unaurlquesuenebien.com",
+    "likes": 18,
+    "user": "Irada"
+}

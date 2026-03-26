@@ -1,0 +1,25 @@
+### USERS: list
+GET http://localhost:3003/api/users
+
+### USERS: delete
+DELETE http://localhost:3003/api/users/5a422a851b54a676234d17f7
+
+
+### USERS: post
+POST http://localhost:3003/api/users/ HTTP/1.1
+content-type: application/json
+
+{
+    "username": "Irada",
+    "name": "Inscryption",
+    "password": "657_inscryption"
+}
+
+### USERS: login
+POST http://localhost:3003/api/login/
+Content-Type: application/json
+
+{
+    "username": "Irada",
+    "password": "657_inscryption"
+}

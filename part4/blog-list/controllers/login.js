@@ -22,11 +22,15 @@ loginRouter.post('/', async (request, response) => {
     id: user._id,
   }
 
-  // token expires in 60*60 seconds, that is, in one hour
+  /**
+   * Token expires in 60*10 seconds, that is, in 10 minutes
+   * Once the token expires, the client app needs to get a new token.
+   * Usually, this happens by forcing the user to re-login to the app.
+   */
   const token = jwt.sign(
     userForToken,
     process.env.SECRET,
-    { expiresIn: 60*60 }
+    { expiresIn: 60*10 }
   )
 
   response

@@ -4,14 +4,6 @@ const Blog = require('../models/blog')
 const User = require('../models/user')
 const jwt = require('jsonwebtoken')
 
-const getTokenFrom = request => {
-  const authorization = request.get('authorization')
-  if (authorization && authorization.startsWith('Bearer ')) {
-    return authorization.replace('Bearer ', '')
-  }
-  return null
-}
-
 blogsRouter.get('/', async (request, response) => {
   const blogs = await Blog
     .find({})
@@ -29,8 +21,23 @@ blogsRouter.get('/:id', async (request, response) => {
   }
 })
 
+const getTokenFrom = request => {
+  const authorization = request.get('authorization')
+  if (authorization && authorization.startsWith('Bearer ')) {
+    return authorization.replace('Bearer ', '')
+  }
+  return null
+}
+
 blogsRouter.post('/', async (request, response) => {
   const body = request.body
+  const decodedToken = jwt.verify(getTokenFrom(request), process.env.SECRET)
+
+  if (!decodedToken.id) {
+    return response.status(401).json({ error: 'token invalid' })
+  }
+
+  const user = await User.findById(decodedToken.id)
 
   if (!body.title || body.title.trim() === '') {
     return response.status(400).json({ error: 'title is required' })
@@ -40,35 +47,9 @@ blogsRouter.post('/', async (request, response) => {
     return response.status(400).json({ error: 'url is required' })
   }
 
-  let user = null
-  const token = getTokenFrom(request)
-
-  if (token) {
-    try {
-      const decodedToken = jwt.verify(token, process.env.SECRET)
-      if (!decodedToken.id) {
-        return response.status(401).json({ error: 'token invalid' })
-      }
-      user = await User.findById(decodedToken.id)
-    } catch (error) {
-      if (body.userId) {
-        user = await User.findById(body.userId)
-      } else {
-        return response.status(401).json({ error: 'token invalid' })
-      }
-    }
-  } else {
-    if (body.userId) {
-      user = await User.findById(body.userId)
-    } else {
-      return response.status(401).json({ error: 'token missing' })
-    }
-  }
-
   if (!user) {
-    return response.status(400).json({ error: 'userId missing or not valid' })
+    return response.status(400).json({ error: 'UserId missing or not valid' })
   }
-
 
   const blog = new Blog({
     title: body.title,
