@@ -10,9 +10,17 @@ const Blog = require('../models/blog')
 const User = require('../models/user')
 const jwt = require('jsonwebtoken')
 const helper = require('./test_helper')
-const { log } = require('node:console')
 
 let testUser
+
+const authorizationFor = (user) => {
+  const token = jwt.sign(
+    { username: user.username, id: user._id },
+    process.env.SECRET
+  )
+
+  return `Bearer ${token}`
+}
 
 describe('Our dummy tests first', () => {
   test('dummy returns one', () => {
@@ -77,6 +85,7 @@ describe('Run all tests', () => {
 
       const response = await api
         .post('/api/blogs')
+        .set('Authorization', authorizationFor(testUser))
         .send(newBlog)
         .expect(201)
         .expect('Content-Type', /application\/json/)
@@ -94,6 +103,7 @@ describe('Run all tests', () => {
 
       await api
         .post('/api/blogs')
+        .set('Authorization', authorizationFor(testUser))
         .send(newBlog)
         .expect(400)
 
@@ -111,6 +121,7 @@ describe('Run all tests', () => {
 
       await api
         .post('/api/blogs')
+        .set('Authorization', authorizationFor(testUser))
         .send(newBlog)
         .expect(400)
 
@@ -134,6 +145,7 @@ describe('Run all tests', () => {
 
       await api
         .post('/api/blogs')
+        .set('Authorization', authorizationFor(testUser))
         .send(newBlog)
         .expect(201)
         .expect('Content-type', /application\/json/)
@@ -143,6 +155,23 @@ describe('Run all tests', () => {
 
       const titles = blogsAtEnd.map(r => r.title)
       assert(titles.includes('Go To Statement Considered Harmful'))
+    })
+
+    test('adding a blog fails with status 401 if token is missing', async () => {
+      const newBlog = {
+        title: 'Unauthorized blog creation attempt',
+        author: 'Anonymous',
+        url: 'http://example.com/unauthorized',
+        likes: 1
+      }
+
+      await api
+        .post('/api/blogs')
+        .send(newBlog)
+        .expect(401)
+
+      const blogsAtEnd = await helper.blogsInDb()
+      assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length)
     })
 
     test('a specific blog can be viewed', async () => {
@@ -162,11 +191,9 @@ describe('Run all tests', () => {
       const blogsAtStart = await helper.blogsInDb()
       const blogToDelete = blogsAtStart[0]
 
-      const token = jwt.sign({ username: testUser.username, id: testUser._id }, process.env.SECRET)
-
       await api
         .delete(`/api/blogs/${blogToDelete.id}`)
-        .set('Authorization', `Bearer ${token}`)
+        .set('Authorization', authorizationFor(testUser))
         .expect(204)
 
       const blogsAtEnd = await helper.blogsInDb()
@@ -181,11 +208,10 @@ describe('Run all tests', () => {
       const blogToDelete = blogsAtStart[0]
 
       const otherUser = await helper.createTestUser()
-      const otherToken = jwt.sign({ username: otherUser.username, id: otherUser._id }, process.env.SECRET)
 
       await api
         .delete(`/api/blogs/${blogToDelete.id}`)
-        .set('Authorization', `Bearer ${otherToken}`)
+        .set('Authorization', authorizationFor(otherUser))
         .expect(401)
 
       const blogsAtEnd = await helper.blogsInDb()
