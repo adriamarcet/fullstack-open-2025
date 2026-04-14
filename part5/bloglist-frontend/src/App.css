@@ -1,0 +1,140 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+.app-layout {
+  display: flex;
+  min-height: 100vh;
+  background: #f8fafc;
+}
+
+.event-sidebar {
+  width: 280px;
+  padding: 1rem;
+  border-right: 1px solid #e2e8f0;
+  background: #ffffff;
+  box-sizing: border-box;
+}
+
+.main-content {
+  flex: 1;
+  padding: 1.25rem;
+}
+
+.form-card {
+  display: grid;
+  gap: 1rem;
+  padding: 1rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.75rem;
+  background: #ffffff;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05);
+  margin-bottom: 1.25rem;
+}
+
+.form-field {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.form-label {
+  font-size: 0.95rem;
+  color: #334155;
+}
+
+.form-input {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 0.75rem 0.9rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.75rem;
+  background: #f8fafc;
+  color: #0f172a;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #7c3aed;
+  box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.08);
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+  border: none;
+  background: #7c3aed;
+  color: #ffffff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.button:hover {
+  background: #6d28d9;
+}
+
+.event-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.event-entry {
+  margin-bottom: 1rem;
+}
+
+.event-message {
+  font-size: 0.9rem;
+  color: #334155;
+}
+
+.event-error {
+  color: #b91c1c;
+}
+
+.event-timestamp {
+  font-size: 0.75rem;
+  color: #64748b;
+}
+
+..error-banner {
+  margin-bottom: 1rem;
+  padding: 0.9rem 1rem;
+  border-radius: 0.75rem;
+  background: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #fecaca;
+}
+
+.blog-list {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.blog-item {
+  padding: 1rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.75rem;
+  background: #ffffff;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05);
+  transition: transform 0.15s ease, border-color 0.15s ease;
+}
+
+.blog-item:hover {
+  transform: translateY(-1px);
+  border-color: #7c3aed;
+}
+
+.blog-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.blog-author {
+  margin-top: 0.25rem;
+  color: #475569;
+}
