@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
@@ -6,19 +6,14 @@ import toast, { Toaster } from 'react-hot-toast'
 import EventSidebar from './components/EventSidebar'
 import LoginForm from './components/LoginForm'
 import './App.css'
-import Login from './services/login'
 import Toggable from './components/Toggleble'
+import BlogForm from './components/BlogForm'
 
 const App = () => {
   const [errorMessage, setErrorMessage] = useState(null)
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
   const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
-  const [newBlogTitle, setNewBlogTitle] = useState('')
-  const [newBlogAuthor, setNewBlogAuthor] = useState('')
-  const [newBlogUrl, setNewBlogUrl] = useState('')
-  const [loginVisible, setLoginVisible] = useState(false)
+  const blogFormRef = useRef()
   const [eventLogs, setEventLogs] = useState(() => {
     const saved = window.localStorage.getItem('blogAppEventLogs')
     return saved ? JSON.parse(saved) : []
@@ -77,9 +72,7 @@ const App = () => {
     }, 5000)
   }
 
-  const handleLogin = async event => {
-    event.preventDefault()
-  
+  const handleLogin = async ({username, password}) => {
     try {
       const user = await loginService.login({username, password})
       window.localStorage.setItem(
@@ -88,35 +81,24 @@ const App = () => {
       blogService.setToken(user.token)
       setUser(user)
       logEvent('User logged in', 'login')
-      setUsername('')
-      setPassword('')
     } catch (error) {
       const message = error.response?.data?.error || 'Wrong credentials'
       notifyError(message)
     }
   }
 
-  const addBlog = async event => {
-    event.preventDefault()
-
+  const addBlog = async blogObject => {
     try {
-      const newBlog = {
-        title: newBlogTitle,
-        author: newBlogAuthor,
-        url: newBlogUrl
-      }
-
-      const createdBlog = await blogService.create(newBlog)
+      const createdBlog = await blogService.create(blogObject)
       setBlogs(blogs.concat(createdBlog))
-      setNewBlogTitle('')
-      setNewBlogAuthor('')
-      setNewBlogUrl('')
       logEvent(`Added blog: ${createdBlog.title} by ${createdBlog.author}`, 'blog')
       toast.success(`New ${createdBlog.title} blog added successfully.`)
     } catch (error) {
       const message = error.response?.data?.error || 'Could not add blog'
       notifyError(message)
     }
+
+    blogFormRef.current.toggleVisibility()
   }
 
   const loginSection = () => {
@@ -124,52 +106,16 @@ const App = () => {
       <Toggable buttonLabel="Log in">
         <section>
           <h2>Login</h2>
-          <LoginForm 
-            handleSubmit={handleLogin}
-            handleUsernameChange={({ target }) => setUsername(target.value)}
-            handlePasswordChange={({ target }) => setPassword(target.value)}
-            username={username}
-            password={password}
-          />
+          <LoginForm submitAction={handleLogin} />
         </section>
       </Toggable>
     )
   }
 
-  const BlogForm = () => (
-    <form className="form-card" onSubmit={addBlog}>
-      <div className="form-field">
-        <label className="form-label" htmlFor="blogTitle">Title</label>
-        <input
-          className="form-input"
-          id="blogTitle"
-          type="text"
-          value={newBlogTitle}
-          onChange={({ target }) => setNewBlogTitle(target.value)}
-        />
-      </div>
-      <div className="form-field">
-        <label className="form-label" htmlFor="blogAuthor">Author</label>
-        <input
-          className="form-input"
-          id="blogAuthor"
-          type="text"
-          value={newBlogAuthor}
-          onChange={({ target }) => setNewBlogAuthor(target.value)}
-        />
-      </div>
-      <div className="form-field">
-        <label className="form-label" htmlFor="blogUrl">URL/Website</label>
-        <input
-          className="form-input"
-          id="blogUrl"
-          type="text"
-          value={newBlogUrl}
-          onChange={({ target }) => setNewBlogUrl(target.value)}
-        />
-      </div>
-      <button className="button" type="submit">Add new blog</button>
-    </form>
+  const blogFormSection = () => (
+    <Toggable buttonLabel="Add new Blog" ref={blogFormRef}>
+      <BlogForm createBlog={addBlog} />
+    </Toggable>
   )
 
   return (
@@ -181,7 +127,7 @@ const App = () => {
         {user && (
           <div>
             <p>{user.name} logged in - <span><button className="button" onClick={handleLogOut}>Log out</button></span></p>
-            {BlogForm()}
+            {blogFormSection()}
           </div>
         )}
         <h2>Blogs List APP</h2>
