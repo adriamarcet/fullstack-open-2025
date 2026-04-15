@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
-import EventSidebar from './components/EventSidebar'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import toast, { Toaster } from 'react-hot-toast'
+import EventSidebar from './components/EventSidebar'
+import LoginForm from './components/LoginForm'
 import './App.css'
+import Login from './services/login'
+import Toggable from './components/Toggleble'
 
 const App = () => {
   const [errorMessage, setErrorMessage] = useState(null)
@@ -15,6 +18,7 @@ const App = () => {
   const [newBlogTitle, setNewBlogTitle] = useState('')
   const [newBlogAuthor, setNewBlogAuthor] = useState('')
   const [newBlogUrl, setNewBlogUrl] = useState('')
+  const [loginVisible, setLoginVisible] = useState(false)
   const [eventLogs, setEventLogs] = useState(() => {
     const saved = window.localStorage.getItem('blogAppEventLogs')
     return saved ? JSON.parse(saved) : []
@@ -75,7 +79,7 @@ const App = () => {
 
   const handleLogin = async event => {
     event.preventDefault()
-    
+  
     try {
       const user = await loginService.login({username, password})
       window.localStorage.setItem(
@@ -115,31 +119,22 @@ const App = () => {
     }
   }
 
-  const LoginForm = () => (
-    <form className="form-card" onSubmit={handleLogin}>
-      <div className="form-field">
-        <label className="form-label" htmlFor="username">User name</label>
-        <input
-          className="form-input"
-          id="username"
-          type="text"
-          value={username}
-          onChange={({ target }) => setUsername(target.value)}
-        />
-      </div>
-      <div className="form-field">
-        <label className="form-label" htmlFor="password">Password</label>
-        <input
-          className="form-input"
-          id="password"
-          type="password"
-          value={password}
-          onChange={({ target }) => setPassword(target.value)}
-        />
-      </div>
-      <button className="button" type="submit">Submit</button>
-    </form>
-  )
+  const loginSection = () => {
+    return (
+      <Toggable buttonLabel="Log in">
+        <section>
+          <h2>Login</h2>
+          <LoginForm 
+            handleSubmit={handleLogin}
+            handleUsernameChange={({ target }) => setUsername(target.value)}
+            handlePasswordChange={({ target }) => setPassword(target.value)}
+            username={username}
+            password={password}
+          />
+        </section>
+      </Toggable>
+    )
+  }
 
   const BlogForm = () => (
     <form className="form-card" onSubmit={addBlog}>
@@ -182,7 +177,7 @@ const App = () => {
       <EventSidebar eventLogs={eventLogs} clearEventsLog={clearEventsLog} />
       <main className="main-content">
         <Toaster />
-        {!user && LoginForm()}
+        {!user && loginSection()}
         {user && (
           <div>
             <p>{user.name} logged in - <span><button className="button" onClick={handleLogOut}>Log out</button></span></p>
