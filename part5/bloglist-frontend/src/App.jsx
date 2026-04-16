@@ -21,7 +21,7 @@ const App = () => {
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
-      setBlogs( blogs )
+      setBlogs(blogs)
     )  
   }, [])
 
@@ -101,6 +101,26 @@ const App = () => {
     blogFormRef.current.toggleVisibility()
   }
 
+  const handleLike = async blog => {
+    try {
+      const newObject = {
+        id: blog.id,
+        title: blog.title,
+        author: blog.author,
+        url: blog.url,
+        likes: blog.likes + 1,
+        user: blog.user
+      }
+      const updatedBlog = await blogService.update(blog.id, newObject)
+      setBlogs(blogs.map(b => b.id !== updatedBlog.id ? b : updatedBlog))
+      logEvent(`${updatedBlog.title} has been updated`, 'blog')
+      toast.success(`${updatedBlog.title} updated successfully.`)
+    } catch (error) {
+      const message = error.response?.data?.error || 'Could not add a like to this blog'
+      notifyError(message)
+    }
+  }
+
   const loginSection = () => {
     return (
       <Toggable buttonLabel="Log in">
@@ -132,8 +152,7 @@ const App = () => {
         )}
         <h2>Blogs List APP</h2>
         <div className="blog-list">
-          {blogs && blogs.map(blog =>
-            <Blog key={blog.id} blog={blog} />
+          {blogs && blogs.map(blog => <Blog key={blog.id} blog={blog} likeFn={handleLike}/>)}
           )}
         </div>
       </main>
