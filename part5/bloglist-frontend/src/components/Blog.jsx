@@ -11,7 +11,7 @@ const Blog = ({ blog, likeFn }) => {
       <p className="blog-title">
         <span>{blog.title}</span>
         {blog.author !== null && (
-          <span> by <span className="blog-author">{blog.author}</span></span>
+          <span> by <span className="blog-author">{blog.author}</span> - Likes: {blog.likes}</span>
         )}
       </p>
       
