@@ -1,6 +1,4 @@
-import { useState, useEffect } from 'react'
 import Toggable from "./Toggleble"
-import blogService from '../services/blogs'
 
 const Blog = ({ blog, likeFn }) => {
 
