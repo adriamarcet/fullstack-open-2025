@@ -10,7 +10,6 @@ import Toggable from './components/Toggleble'
 import BlogForm from './components/BlogForm'
 
 const App = () => {
-  const [errorMessage, setErrorMessage] = useState(null)
   const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
   const blogFormRef = useRef()
@@ -22,7 +21,7 @@ const App = () => {
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs(blogs)
-    )  
+    )
   }, [])
 
   useEffect(() => {
@@ -64,17 +63,13 @@ const App = () => {
   const notifyError = message => {
     const timestamp = new Date().toLocaleString()
     const entry = { message, type: 'error', timestamp }
-    setErrorMessage(message)
     setEventLogs(prev => [...prev, entry])
     toast.error(message)
-    setTimeout(() => {
-      setErrorMessage(null)
-    }, 5000)
   }
 
-  const handleLogin = async ({username, password}) => {
+  const handleLogin = async ({ username, password }) => {
     try {
-      const user = await loginService.login({username, password})
+      const user = await loginService.login({ username, password })
       window.localStorage.setItem(
         'loggedBlogListappUser', JSON.stringify(user)
       )
@@ -121,6 +116,22 @@ const App = () => {
     }
   }
 
+  const handleDelete = async blog => {
+    if (!window.confirm(`Delete blog ${blog.title} by ${blog.author}?`)) {
+      return
+    }
+
+    try {
+      await blogService.remove(blog.id)
+      setBlogs(blogs.filter(b => b.id !== blog.id))
+      logEvent(`${blog.title} has been removed`, 'blog')
+      toast.success(`${blog.title} removed successfully.`)
+    } catch (error) {
+      const message = error.response?.data?.error || 'Could not delete this blog'
+      notifyError(message)
+    }
+  }
+
   const loginSection = () => {
     return (
       <Toggable buttonLabel="Log in">
@@ -154,7 +165,7 @@ const App = () => {
         )}
         <h2>Blogs List APP</h2>
         <div className="blog-list">
-          {sortedBlogs.map(blog => <Blog key={blog.id} blog={blog} likeFn={handleLike}/>)}
+          {sortedBlogs.map(blog => <Blog key={blog.id} blog={blog} user={user} likeFn={handleLike} deleteFn={handleDelete} />)}
         </div>
       </main>
     </div>

@@ -1,5 +1,4 @@
 const blogsRouter = require('express').Router()
-const { response } = require('../app')
 const Blog = require('../models/blog')
 const middleware = require('../utils/middleware')
 
@@ -54,7 +53,7 @@ blogsRouter.put('/:id', async (request, response) => {
     request.params.id,
     { title, author, url, likes },
     { new: true, runValidators: true }
-  )
+  ).populate('user', { username: 1, name: 1 })
 
   if (blog) {
     response.json(blog)

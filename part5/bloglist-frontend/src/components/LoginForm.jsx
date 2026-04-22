@@ -1,14 +1,14 @@
 import { useState } from 'react'
 
-const LoginForm = ({submitAction}) => {
+const LoginForm = ({ submitAction }) => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const handleSubmit = event => {
     event.preventDefault()
 
-      submitAction({username, password})
-      setUsername('')
-      setPassword('')
+    submitAction({ username, password })
+    setUsername('')
+    setPassword('')
   }
 
   return (
@@ -35,6 +35,6 @@ const LoginForm = ({submitAction}) => {
       </div>
       <button className="button" type="submit">Submit</button>
     </form>
-)}
+  )}
 
 export default LoginForm
