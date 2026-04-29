@@ -1,4 +1,4 @@
-import Toggable from './Toggleble'
+import Togglable from './Togglable'
 
 const Blog = ({ blog, user, likeFn, deleteFn }) => {
 
@@ -15,11 +15,11 @@ const Blog = ({ blog, user, likeFn, deleteFn }) => {
       <p className="blog-title">
         <span>{blog.title}</span>
         {blog.author !== null && (
-          <span> by <span className="blog-author">{blog.author}</span> - Likes: {blog.likes}</span>
+          <span> by <span className="blog-author">{blog.author}</span></span>
         )}
       </p>
 
-      <Toggable buttonLabel="View more details">
+      <Togglable buttonLabel="View more details">
         <div>
           <ul>
             <li>URL: {blog.url}</li>
@@ -30,7 +30,7 @@ const Blog = ({ blog, user, likeFn, deleteFn }) => {
             )}
           </ul>
         </div>
-      </Toggable>
+      </Togglable>
     </div>
   )
 }

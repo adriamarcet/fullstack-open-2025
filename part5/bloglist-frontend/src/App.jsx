@@ -6,7 +6,7 @@ import toast, { Toaster } from 'react-hot-toast'
 import EventSidebar from './components/EventSidebar'
 import LoginForm from './components/LoginForm'
 import './App.css'
-import Toggable from './components/Toggleble'
+import Togglable from './components/Togglable'
 import BlogForm from './components/BlogForm'
 
 const App = () => {
@@ -134,19 +134,19 @@ const App = () => {
 
   const loginSection = () => {
     return (
-      <Toggable buttonLabel="Log in">
+      <Togglable buttonLabel="Log in">
         <section>
           <h2>Login</h2>
           <LoginForm submitAction={handleLogin} />
         </section>
-      </Toggable>
+      </Togglable>
     )
   }
 
   const blogFormSection = () => (
-    <Toggable buttonLabel="Add new Blog" ref={blogFormRef}>
+    <Togglable buttonLabel="Add new Blog" ref={blogFormRef}>
       <BlogForm createBlog={addBlog} />
-    </Toggable>
+    </Togglable>
   )
 
   const sortedBlogs = blogs ? [...blogs].sort((a, b) => b.likes - a.likes) : []

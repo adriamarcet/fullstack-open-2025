@@ -16,7 +16,7 @@ const LoginForm = ({ submitAction }) => {
       <div className="form-field">
         <label className="form-label" htmlFor="username">User name</label>
         <input
-          className="form-input"
+          className="form-input form-input-username"
           id="username"
           type="text"
           value={username}

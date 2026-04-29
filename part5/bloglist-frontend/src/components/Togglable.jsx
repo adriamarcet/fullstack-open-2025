@@ -1,6 +1,6 @@
 import { useState, useImperativeHandle } from 'react'
 
-const Toggable = (props) => {
+const Togglable = (props) => {
   const [visible, setVisible] = useState(false)
 
   const hideWhenVisible = { display: visible ? 'none' : '' }
@@ -21,10 +21,10 @@ const Toggable = (props) => {
       </div>
       <div style={showWhenVisible}>
         {props.children}
-        <button onClick={toggleVisibility}>cancel</button>
+        <button onClick={toggleVisibility}>Close</button>
       </div>
     </>
   )
 }
 
-export default Toggable
+export default Togglable
