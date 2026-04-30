@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"path": "../part4/blog-list"
+		},
+		{
+			"path": "bloglist-frontend"
+		},
+		{
+			"path": "bloglist-e2e"
+		}
+	]
+}
