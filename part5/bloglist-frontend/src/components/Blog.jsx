@@ -13,7 +13,7 @@ const Blog = ({ blog, user, likeFn, deleteFn }) => {
   return (
     <div className="blog-item">
       <p className="blog-title">
-        <span>{blog.title}</span>
+        <span data-testid="username">{blog.title}</span>
         {blog.author !== null && (
           <span> by <span className="blog-author">{blog.author}</span></span>
         )}
