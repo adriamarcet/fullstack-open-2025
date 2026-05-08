@@ -3,7 +3,6 @@ import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import toast, { Toaster } from 'react-hot-toast'
-import EventSidebar from './components/EventSidebar'
 import LoginForm from './components/LoginForm'
 import './App.css'
 import Togglable from './components/Togglable'
@@ -13,10 +12,6 @@ const App = () => {
   const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
   const blogFormRef = useRef()
-  const [eventLogs, setEventLogs] = useState(() => {
-    const saved = window.localStorage.getItem('blogAppEventLogs')
-    return saved ? JSON.parse(saved) : []
-  })
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -33,37 +28,20 @@ const App = () => {
     }
   }, [])
 
-  useEffect(() => {
-    window.localStorage.setItem('blogAppEventLogs', JSON.stringify(eventLogs))
-  }, [eventLogs])
-
   const handleLogOut = () => {
-    logEvent('User logged out', 'logout', true)
+    logEvent('User logged out', 'logout')
     window.localStorage.removeItem('loggedBlogListappUser')
     location.reload()
   }
 
-  const logEvent = (message, type = 'info', persist = false) => {
+  const logEvent = (message, type = 'info') => {
     const timestamp = new Date().toLocaleString()
-    const entry = { message, type, timestamp }
-    setEventLogs(prev => {
-      const nextLogs = [...prev, entry]
-      if (persist) {
-        window.localStorage.setItem('blogAppEventLogs', JSON.stringify(nextLogs))
-      }
-      return nextLogs
-    })
-  }
-
-  const clearEventsLog = () => {
-    window.localStorage.removeItem('blogAppEventLogs')
-    setEventLogs([])
+    console.log(`[${timestamp}] [${type}] ${message}`)
   }
 
   const notifyError = message => {
     const timestamp = new Date().toLocaleString()
-    const entry = { message, type: 'error', timestamp }
-    setEventLogs(prev => [...prev, entry])
+    console.error(`[${timestamp}] [error] ${message}`)
     toast.error(message)
   }
 
@@ -153,7 +131,6 @@ const App = () => {
 
   return (
     <div className="app-layout">
-      <EventSidebar eventLogs={eventLogs} clearEventsLog={clearEventsLog} />
       <main className="main-content">
         <Toaster />
         {!user && loginSection()}
