@@ -110,16 +110,14 @@ const App = () => {
     }
   }
 
-  const loginSection = () => {
-    return (
-      <Togglable buttonLabel="Log in">
-        <section>
-          <h2>Login</h2>
-          <LoginForm submitAction={handleLogin} />
-        </section>
-      </Togglable>
-    )
-  }
+  const loginSection = () => (
+    <Togglable buttonLabel="Log in" defaultVisible>
+      <section>
+        <h2>Login</h2>
+        <LoginForm submitAction={handleLogin} />
+      </section>
+    </Togglable>
+  )
 
   const blogFormSection = () => (
     <Togglable buttonLabel="Add new Blog" ref={blogFormRef}>
@@ -136,7 +134,9 @@ const App = () => {
         {!user && loginSection()}
         {user && (
           <div>
-            <p>{user.name} logged in - <span><button className="button" onClick={handleLogOut}>Log out</button></span></p>
+            <div className='loginBox'>
+              <p>{user.username} logged in.</p><button onClick={handleLogOut}>Log out</button>
+            </div>
             {blogFormSection()}
           </div>
         )}

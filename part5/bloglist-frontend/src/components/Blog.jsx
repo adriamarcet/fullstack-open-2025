@@ -12,11 +12,9 @@ const Blog = ({ blog, user, likeFn, deleteFn }) => {
 
   return (
     <div className="blog-item">
-      <p className="blog-title">
-        <span data-testid="username">{blog.title}</span>
-        {blog.author !== null && (
-          <span> by <span className="blog-author">{blog.author}</span></span>
-        )}
+      <p className="blog-title" data-testid="blogItem">
+        <span data-testid="blogTitle">{blog.title}</span>
+        {blog.author !== null && (<> by <span className="blog-author">{blog.author}</span></>)}
       </p>
 
       <Togglable buttonLabel="View more details">

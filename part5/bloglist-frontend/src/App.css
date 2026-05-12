@@ -99,7 +99,7 @@
   color: #64748b;
 }
 
-..error-banner {
+.error-banner {
   margin-bottom: 1rem;
   padding: 0.9rem 1rem;
   border-radius: 0.75rem;
@@ -127,7 +127,6 @@
   transform: translateY(-1px);
   border-color: #7c3aed;
 }
-
 .blog-title {
   font-size: 1rem;
   font-weight: 700;
@@ -137,4 +136,14 @@
 .blog-author {
   margin-top: 0.25rem;
   color: #475569;
+}
+
+.loginBox {
+  align-items: baseline;
+  display: flex;
+  gap: 1.5rem;
+}
+
+.loginBox button {
+  height: fit-content;
 }
