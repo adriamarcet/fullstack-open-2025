@@ -53,7 +53,6 @@ describe('Bloglist App', () => {
                 author: 'Some author from e2e test repo', 
                 url: 'http://someurlfrome2etestrepo' 
             })
-
             await expect(page.getByTestId('blogItem')).toBeVisible();
             await expect(page.getByText('A Test Blog from e2e test repo', { exact: true })).toBeVisible()
         })
@@ -64,7 +63,6 @@ describe('Bloglist App', () => {
                 author: 'Some author from e2e test repo', 
                 url: 'http://someurlfrome2etestrepo' 
             })
-
             await addBlog(page, { 
                 title: 'A Test Blog from e2e test repo 2', 
                 author: 'Some author from e2e test repo 2', 
@@ -78,6 +76,92 @@ describe('Bloglist App', () => {
                 .toHaveText([
                     'A Test Blog from e2e test repo by Some author from e2e test repo', 
                     'A Test Blog from e2e test repo 2 by Some author from e2e test repo 2']);
+        })
+
+        test('a new Blog can be liked', async ({page}) => {
+            await addBlog(page, { 
+                title: 'A Test Blog from e2e test repo', 
+                author: 'Some author from e2e test repo', 
+                url: 'http://someurlfrome2etestrepo' 
+            })
+            const blogCard = page.locator('.blog-item').filter({
+                hasText: 'A Test Blog from e2e test repo',
+            })
+            await expect(blogCard.getByTestId('blogItem')).toBeVisible()
+            await expect(
+                blogCard.getByText('A Test Blog from e2e test repo', { exact: true })
+            ).toBeVisible()
+            await blogCard.getByRole('button', { name: 'View more details' }).click()
+            const likesRow = blogCard.locator('li').filter({ hasText: 'Likes:' })
+            const likesBefore = Number((await likesRow.textContent()).match(/Likes:\s*(\d+)/)[1])
+            await blogCard.getByRole('button', { name: 'Like' }).click()
+            await expect
+                .poll(async () => {
+                    const m = (await likesRow.textContent()).match(/Likes:\s*(\d+)/)
+                    return m ? Number(m[1]) : NaN
+                })
+                .toBe(likesBefore + 1)
+        })
+
+        test('the user who added the blog can delete the blog', async ({page}) => {
+            await addBlog(page, { 
+                title: 'A Test Blog from e2e test repo', 
+                author: 'Some author from e2e test repo', 
+                url: 'http://someurlfrome2etestrepo' 
+            })
+            const blogCard = page.locator('.blog-item').filter({
+                hasText: 'A Test Blog from e2e test repo',
+            })
+            await expect(blogCard.getByTestId('blogItem')).toBeVisible()
+            await expect(
+                blogCard.getByText('A Test Blog from e2e test repo', { exact: true })
+            ).toBeVisible()
+            await blogCard.getByRole('button', { name: 'View more details' }).click()
+            await expect(
+                blogCard.getByRole('button', { name: 'Delete blog' })
+            ).toBeVisible()
+            page.once('dialog', dialog => dialog.accept())
+            await blogCard.getByRole('button', { name: 'Delete blog' }).click()
+            await expect(
+                blogCard.getByText('A Test Blog from e2e test repo', { exact: true })
+            ).not.toBeVisible()
+        })
+
+        test('only the user who added the blog sees the blog\'s delete button', async ({page, request}) => {
+            await addBlog(page, { 
+                title: 'A Test Blog from e2e test repo', 
+                author: 'Some author from e2e test repo', 
+                url: 'http://someurlfrome2etestrepo' 
+            })
+
+            const blogCard = page.locator('.blog-item').filter({
+                hasText: 'A Test Blog from e2e test repo',
+            })
+            await expect(blogCard.getByTestId('blogItem')).toBeVisible()                        
+            await expect(
+                blogCard.getByText('A Test Blog from e2e test repo', { exact: true })
+            ).toBeVisible()
+            await blogCard.getByRole('button', { name: 'View more details' }).click()
+            await expect(
+                blogCard.getByRole('button', { name: 'Delete blog' })
+            ).toBeVisible()
+
+            await request.post('/api/users', {
+                data: {
+                    name: 'Professor Oberburger',
+                    username: 'professor',
+                    password: 'starmouse_1000'
+                }
+            })
+            await page.getByRole('button', { name: 'Log out' }).click()
+            await loginWith(page, 'professor', 'starmouse_1000')
+            await page.getByText(`professor logged in.`).waitFor()
+            await expect(page.getByText('professor logged in.')).toBeVisible()
+
+            await blogCard.getByRole('button', { name: 'View more details' }).click()
+            await expect(
+                blogCard.getByRole('button', { name: 'Delete blog' })
+            ).toHaveCount(0)
         })
     })
 })
