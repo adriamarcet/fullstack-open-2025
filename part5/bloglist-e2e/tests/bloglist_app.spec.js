@@ -1,4 +1,4 @@
-import { loginWith, addBlog } from './helper'
+import { loginWith, addBlog, likeBlog, getLikesInDisplayOrder } from './helper'
 const { test, describe, expect, beforeEach } = require('@playwright/test')
 
 describe('Bloglist App', () => {
@@ -72,10 +72,34 @@ describe('Bloglist App', () => {
             await expect(page.locator('.blog-list')).toBeVisible();
             await expect(page.getByTestId('blogItem')).toHaveCount(2);
             await expect(page
-                .getByTestId('blogItem'))
+                .getByTestId('blogTitle'))
                 .toHaveText([
-                    'A Test Blog from e2e test repo by Some author from e2e test repo', 
-                    'A Test Blog from e2e test repo 2 by Some author from e2e test repo 2']);
+                    'A Test Blog from e2e test repo', 
+                    'A Test Blog from e2e test repo 2']);
+        })
+
+        test('blogs are arranged in the order according to the likes, the blog with the most likes first', async ({ page }) => {
+            await addBlog(page, {
+                title: 'Blog with least likes',
+                author: 'Author A',
+                url: 'http://example.com/a',
+            })
+            await addBlog(page, {
+                title: 'Blog with most likes',
+                author: 'Author B',
+                url: 'http://example.com/b',
+            })
+            await addBlog(page, {
+                title: 'Blog with medium likes',
+                author: 'Author C',
+                url: 'http://example.com/c',
+            })
+
+            await likeBlog(page, 'Blog with most likes', 3)
+            await likeBlog(page, 'Blog with medium likes', 2)
+
+            const likesInOrder = await getLikesInDisplayOrder(page)
+            expect(likesInOrder).toEqual([3, 2, 0])
         })
 
         test('a new Blog can be liked', async ({page}) => {
@@ -87,7 +111,7 @@ describe('Bloglist App', () => {
             const blogCard = page.locator('.blog-item').filter({
                 hasText: 'A Test Blog from e2e test repo',
             })
-            await expect(blogCard.getByTestId('blogItem')).toBeVisible()
+            await expect(blogCard.getByTestId('blogTitle')).toBeVisible()
             await expect(
                 blogCard.getByText('A Test Blog from e2e test repo', { exact: true })
             ).toBeVisible()
@@ -112,7 +136,7 @@ describe('Bloglist App', () => {
             const blogCard = page.locator('.blog-item').filter({
                 hasText: 'A Test Blog from e2e test repo',
             })
-            await expect(blogCard.getByTestId('blogItem')).toBeVisible()
+            await expect(blogCard.getByTestId('blogTitle')).toBeVisible()
             await expect(
                 blogCard.getByText('A Test Blog from e2e test repo', { exact: true })
             ).toBeVisible()
@@ -137,7 +161,7 @@ describe('Bloglist App', () => {
             const blogCard = page.locator('.blog-item').filter({
                 hasText: 'A Test Blog from e2e test repo',
             })
-            await expect(blogCard.getByTestId('blogItem')).toBeVisible()                        
+            await expect(blogCard.getByTestId('blogTitle')).toBeVisible()                        
             await expect(
                 blogCard.getByText('A Test Blog from e2e test repo', { exact: true })
             ).toBeVisible()
