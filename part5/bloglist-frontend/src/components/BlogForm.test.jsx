@@ -19,9 +19,9 @@ describe('<BlogForm />', () => {
 
     render(<BlogForm createBlog={handleAddBlog} />)
     screen.debug()
-    const inputTitle = screen.getByRole('textbox', { name: /Title/i})
-    const inputAuthor = screen.getByRole('textbox', { name: /Author/i})
-    const inputUrl = screen.getByRole('textbox', { name: /URL\/Website/i})
+    const inputTitle = screen.getByRole('textbox', { name: /Title/i })
+    const inputAuthor = screen.getByRole('textbox', { name: /Author/i })
+    const inputUrl = screen.getByRole('textbox', { name: /URL\/Website/i })
     const submitButton = screen.getByRole('button', { name: /Add new blog/i })
     const user = userEvent.setup()
     await user.type(inputTitle, 'A title entered in a test')
