@@ -49,7 +49,7 @@ const App = () => {
     <>
       <Router>
         <Routes>
-          <Route element={<BaseLayout user={user} />}>
+          <Route element={<BaseLayout user={user} setUser={setUser} logEvent={logEvent} notifyError={notifyError} />}>
             <Route path="/" element={<HomePage  user={user} blogs={blogs} blogFormRef={blogFormRef}  logEvent={logEvent} notifyError={notifyError} />} />
             <Route path="/blogs" element={<BlogsPage user={user} blogs={blogs} logEvent={logEvent} notifyError={notifyError} />} />
             <Route path="/blogs/:id" element={

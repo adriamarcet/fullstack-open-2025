@@ -144,3 +144,9 @@
 .loginBox button {
   height: fit-content;
 }
+
+@layer kelp.extend {
+	.navbar {
+		--justify: start;
+	}
+}

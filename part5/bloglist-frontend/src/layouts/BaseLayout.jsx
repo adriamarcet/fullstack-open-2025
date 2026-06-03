@@ -1,8 +1,10 @@
 import { Link, Outlet } from 'react-router-dom'
 import Togglable from '../components/Togglable'
 import LoginForm from '../components/LoginForm'
+import blogService from '../services/blogs'
+import loginService from '../services/login'
 
-const BaseLayout = ({ user }) => {
+const BaseLayout = ({ user, setUser, logEvent, notifyError }) => {
   const padding = { paddingRight: 5 }
 
   const loginSection = () => (
@@ -32,13 +34,19 @@ const BaseLayout = ({ user }) => {
 
   return (
     <>
-      {!user && loginSection()}
-      <div>
-        <Link style={padding} to="/">Home</Link>
-        <Link style={padding} to="/blogs">Blogs</Link>
-        <Link style={padding} to="/create">Create</Link>
-      </div>
-      <Outlet />
+      <header className="container-xl">
+        <nav className="navbar">
+          <ul>
+            <li><Link style={padding} to="/">Home</Link></li>
+            <li><Link style={padding} to="/blogs">Blogs</Link></li>
+            <li><Link style={padding} to="/create">Create</Link></li>
+          </ul>
+        </nav>
+        {!user && loginSection()}
+      </header>
+      <main className="container-xl margin-start-xl">
+        <Outlet />
+      </main>
     </>
   )
 }
