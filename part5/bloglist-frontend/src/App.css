@@ -133,10 +133,7 @@
   color: #0f172a;
 }
 
-.blog-author {
-  margin-top: 0.25rem;
-  color: #475569;
-}
+.blog-author { margin-top: 0.25rem; }
 
 .loginBox {
   align-items: baseline;
