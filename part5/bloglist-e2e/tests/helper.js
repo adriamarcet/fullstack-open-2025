@@ -11,7 +11,7 @@ const loginWith = async (page, username, password) => {
 }
 
 const addBlog = async (page, blog) => {
-    await page.getByRole('button', { name: 'Add new Blog'}).click()
+    await page.goto('/create')
     await page.getByLabel('Title').fill(blog.title)
     await page.getByLabel('Author').fill(blog.author)
     await page.getByLabel('URL/Website').fill(blog.url)

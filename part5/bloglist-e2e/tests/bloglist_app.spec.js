@@ -21,6 +21,7 @@ describe('Bloglist App', () => {
     })
 
     test('Login form is shown', async ({ page }) => {
+        await page.goto('/login')
         const loginForm = page.locator('.form-card')
         await loginForm.waitFor()
         await expect(loginForm).toBeVisible()
@@ -28,23 +29,31 @@ describe('Bloglist App', () => {
 
     describe('Login', () => {
         test('succeeds with correct credentials', async ({ page }) => {
+            await page.goto('/login')
             await loginWith(page, 'mitkey', 'starmouse_1000')
-            await page.getByText(`mitkey logged in.`).waitFor()
-            await expect(page.getByText('mitkey logged in.')).toBeVisible()
+            const profileLink = page.getByRole('link', { name: 'Profile' });
+            await profileLink.waitFor();
+            profileLink.click()
+            await expect(page.getByText(`Welcome back, Mitkey the Starmouse.`)).toBeVisible()
         })
 
         test('fails with wrong credentials', async ({ page }) => {
+            await page.goto('/login')
             await loginWith(page, 'mitkey', 'starmouse_1001')
             await expect(page.getByText('Invalid username or password')).toBeVisible()
-            await expect(page.getByText('mitkey logged in.')).not.toBeVisible()
+            await expect(page.getByText('Welcome back, Mitkey the Starmouse.')).not.toBeVisible()
         })
     })
 
     describe('When logged in', () => {
         beforeEach(async ({page}) => {
+            await page.goto('/login')
             await loginWith(page, 'mitkey', 'starmouse_1000')
-            await page.getByText(`mitkey logged in.`).waitFor()
-            await expect(page.getByText('mitkey logged in.')).toBeVisible()
+            const profileLink = page.getByRole('link', { name: 'Profile' });
+            await profileLink.waitFor();
+            profileLink.click()
+            await expect(page.getByText(`Welcome back, Mitkey the Starmouse.`)).toBeVisible()
+            await page.goto('/')
         })
     
         test('a new blog can be created', async ({page}) => {
@@ -53,6 +62,7 @@ describe('Bloglist App', () => {
                 author: 'Some author from e2e test repo', 
                 url: 'http://someurlfrome2etestrepo' 
             })
+            await page.goto('/blogs')
             await expect(page.getByTestId('blogItem')).toBeVisible();
             await expect(page.getByText('A Test Blog from e2e test repo', { exact: true })).toBeVisible()
         })
@@ -63,12 +73,14 @@ describe('Bloglist App', () => {
                 author: 'Some author from e2e test repo', 
                 url: 'http://someurlfrome2etestrepo' 
             })
+
             await addBlog(page, { 
                 title: 'A Test Blog from e2e test repo 2', 
                 author: 'Some author from e2e test repo 2', 
                 url: 'http://someurlfrome2etestrepo2' 
             })
 
+            await page.goto('/blogs')
             await expect(page.locator('.blog-list')).toBeVisible();
             await expect(page.getByTestId('blogItem')).toHaveCount(2);
             await expect(page
@@ -84,17 +96,20 @@ describe('Bloglist App', () => {
                 author: 'Author A',
                 url: 'http://example.com/a',
             })
+
             await addBlog(page, {
                 title: 'Blog with most likes',
                 author: 'Author B',
                 url: 'http://example.com/b',
             })
+
             await addBlog(page, {
                 title: 'Blog with medium likes',
                 author: 'Author C',
                 url: 'http://example.com/c',
             })
-
+            
+            await page.goto('/blogs')
             await likeBlog(page, 'Blog with most likes', 3)
             await likeBlog(page, 'Blog with medium likes', 2)
 
@@ -108,6 +123,8 @@ describe('Bloglist App', () => {
                 author: 'Some author from e2e test repo', 
                 url: 'http://someurlfrome2etestrepo' 
             })
+
+            await page.goto('/blogs')
             const blogCard = page.locator('.blog-item').filter({
                 hasText: 'A Test Blog from e2e test repo',
             })
@@ -133,6 +150,8 @@ describe('Bloglist App', () => {
                 author: 'Some author from e2e test repo', 
                 url: 'http://someurlfrome2etestrepo' 
             })
+
+            await page.goto('/blogs')
             const blogCard = page.locator('.blog-item').filter({
                 hasText: 'A Test Blog from e2e test repo',
             })
@@ -158,6 +177,7 @@ describe('Bloglist App', () => {
                 url: 'http://someurlfrome2etestrepo' 
             })
 
+            page.goto('/blogs')
             const blogCard = page.locator('.blog-item').filter({
                 hasText: 'A Test Blog from e2e test repo',
             })
@@ -169,7 +189,7 @@ describe('Bloglist App', () => {
             await expect(
                 blogCard.getByRole('button', { name: 'Delete blog' })
             ).toBeVisible()
-
+            
             await request.post('/api/users', {
                 data: {
                     name: 'Professor Oberburger',
@@ -178,10 +198,14 @@ describe('Bloglist App', () => {
                 }
             })
             await page.getByRole('button', { name: 'Log out' }).click()
+            
+            page.goto('/login')
             await loginWith(page, 'professor', 'starmouse_1000')
-            await page.getByText(`professor logged in.`).waitFor()
-            await expect(page.getByText('professor logged in.')).toBeVisible()
-
+            page.goto('/login')
+            await page.getByText(`Welcome back, Professor Oberburger.`).waitFor()
+            await expect(page.getByText(`Welcome back, Professor Oberburger.`)).toBeVisible()
+            
+            page.goto('/blogs')
             await blogCard.getByRole('button', { name: 'View more details' }).click()
             await expect(
                 blogCard.getByRole('button', { name: 'Delete blog' })
