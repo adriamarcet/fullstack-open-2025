@@ -32,7 +32,7 @@ const Blog = ({ blog, user, deleteBlog, handleLike, isListView=false }) => {
       <Link to={blog.url} sx={{ margin: 4 }}>{blog.url}</Link>
       <Divider />
       <Stack direction="row" spacing={2} sx={{ alignItems: 'baseline', p: 2 }}>
-        <Typography variant="body2">{blog.likes} Like{blog.likes < 1 ? 's': ''}</Typography>
+        <Typography variant="body2">{blog.likes} Like{blog.likes !== 1 ? 's' : ''}</Typography>
         <Paper>
           {user && blog.user && user.username === blog.user.username && (
             <Button variant="outlined" onClick={increaseLike} startIcon={<ThumbUpOffAltIcon />}>Like</Button>
