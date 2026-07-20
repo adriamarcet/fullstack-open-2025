@@ -1,20 +1,35 @@
 import Blog from './Blog'
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material'
+import { Link } from 'react-router-dom'
 
-const BlogList = ({ blogs, user, handleLike, deleteBlog }) => {
+const BlogList = ({ blogs }) => {
   const sortedBlogs = blogs ? [...blogs].sort((a, b) => b.likes - a.likes) : []
 
   return (
-    <div className="blog-list">
-      {sortedBlogs.map(blog =>
-        <Blog
-          key={blog.id}
-          blog={blog}
-          user={user}
-          deleteBlog={deleteBlog}
-          handleLike={handleLike}
-          isListView={true}
-        />)}
-    </div>
+    <TableContainer component={Paper}>
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell>Title</TableCell>
+            <TableCell>Author</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {sortedBlogs.map(blog =>
+            <TableRow key={blog.id}>
+              <TableCell>
+                <Link to={`/blogs/${blog.id}`}>
+                  {blog.title}
+                </Link>
+              </TableCell>
+              <TableCell>
+                {blog.author}
+              </TableCell>
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
+    </TableContainer>
   )
 }
 

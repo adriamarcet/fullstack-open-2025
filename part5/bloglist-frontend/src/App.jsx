@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef } from 'react'
 import blogService from './services/blogs'
 import toast from 'react-hot-toast'
-import './App.css'
+// import './App.css'
+import { Container } from '@mui/material'
 import { logEvent, notifyError } from './helpers'
 import BaseLayout from './layouts/BaseLayout'
 import HomePage from './pages/HomePage'
@@ -93,7 +94,7 @@ const App = () => {
   }
 
   return (
-    <>
+    <Container>
       <Routes>
         <Route element={<BaseLayout user={user} setUser={setUser} handleLogOut={handleLogOut} />}>
           <Route path="/" element={
@@ -131,7 +132,7 @@ const App = () => {
             />} />
         </Route>
       </Routes>
-    </>
+    </Container>
   )
 }
 

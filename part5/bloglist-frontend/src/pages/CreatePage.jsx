@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import BlogForm from '../components/BlogForm'
+import { TextField, Button } from '@mui/material'
 
 const CreatePage = ({ user, addBlog }) => {
   const handleAddBlog = addBlog
@@ -20,7 +21,7 @@ const CreatePage = ({ user, addBlog }) => {
       {!user && (
         <div>
           <p>You have to be logged in. Please go to Log In page.</p>
-          <Link className='btn secondary' to="/login">Log in</Link>
+          <Button color="inherit" variant='contained' href="/login">Log in</Button>
         </div>
       )}
     </>

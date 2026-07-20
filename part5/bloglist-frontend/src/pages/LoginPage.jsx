@@ -3,6 +3,7 @@ import LoginForm from '../components/LoginForm'
 import loginService from '../services/login'
 import blogService from '../services/blogs'
 import { logEvent, notifyError } from '../helpers'
+import { Button } from '@mui/material'
 
 const LoginPage = ({ user, setUser, handleLogOut }) => {
   const navigate = useNavigate()
@@ -36,7 +37,7 @@ const LoginPage = ({ user, setUser, handleLogOut }) => {
         <section>
           <h2>Already logged in</h2>
           <p>Welcome back, {user.name || user.username}.</p>
-          <button className="btn secondary" onClick={handleLogOut}>Log out</button>
+          <Button color="inherit" variant='contained' onClick={handleLogOut}>Log out</Button>
         </section>
       ) : (
         loginSection()
